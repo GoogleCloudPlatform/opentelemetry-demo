@@ -9,15 +9,6 @@ itself, see
 If you would like to contribute to the Google Cloud integration, see
 instructions below.
 
-Before you start - see OpenTelemetry
- [Contributor Guide](https://github.com/open-telemetry/community/blob/main/guides/contributor/README.md)
- for details on code attribution.
-
-We meet every other week on Wednesday's at 8:00 PT. The meeting is subject to change
-depending on contributors' availability. Check the [OpenTelemetry community
-calendar](https://github.com/open-telemetry/community?tab=readme-ov-file#special-interest-groups)
-for specific dates and Zoom meeting links.
-
 ## Sign the Google CLA
 
 Contributions to this project must be accompanied by a
@@ -213,3 +204,4 @@ Maintainers can create a new release when desired by following these steps.
   committing the changes.
 
 [docs]: https://opentelemetry.io/docs/demo/
+
