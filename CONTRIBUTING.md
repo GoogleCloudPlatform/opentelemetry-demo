@@ -1,45 +1,41 @@
 # Contributing
 
-Welcome to OpenTelemetry Demo Webstore repository!
+Welcome to OpenTelemetry Demo Webstore repository Google Cloud integration!
+
+This is the fork for the Google Cloud integration. To contribute to the demo
+itself, see
+https://github.com/open-telemetry/opentelemetry-demo/blob/main/CONTRIBUTING.md.
+
+If you would like to contribute to the Google Cloud integration, see
+instructions below.
 
 Before you start - see OpenTelemetry
  [Contributor Guide](https://github.com/open-telemetry/community/blob/main/guides/contributor/README.md)
  for details on code attribution.
-
-## Join a SIG Call
 
 We meet every other week on Wednesday's at 8:00 PT. The meeting is subject to change
 depending on contributors' availability. Check the [OpenTelemetry community
 calendar](https://github.com/open-telemetry/community?tab=readme-ov-file#special-interest-groups)
 for specific dates and Zoom meeting links.
 
-Meeting notes are available as a public [Google
-doc](https://docs.google.com/document/d/16f-JOjKzLgWxULRxY8TmpM_FjlI1sthvKurnqFz9x98/edit).
-For edit access, get in touch on
-[Slack](https://cloud-native.slack.com/archives/C03B4CWV4DA).
+## Sign the Google CLA
 
-## Sign the CLA
+Contributions to this project must be accompanied by a
+[Contributor License Agreement](https://cla.developers.google.com/about) (CLA).
+You (or your employer) retain the copyright to your contribution; this simply
+gives us permission to use and redistribute your contributions as part of the
+project.
 
-Before you can contribute, you will need to sign the [Contributor License
-Agreement](https://identity.linuxfoundation.org/projects/cncf).
+If you or your current employer have already signed the Google CLA (even if it
+was for a different project), you probably don't need to do it again.
 
-## Find a Buddy and Get Started Quickly
+Visit <https://cla.developers.google.com/> to see your current agreements or to
+sign a new one.
 
-If you are looking for someone to help you find a starting point and be a
-resource for your first contribution, join our Slack channel and find a buddy!
+### Review our community guidelines
 
-1. Create your [CNCF Slack account](http://slack.cncf.io/) and join the
-   [otel-community-demo](https://app.slack.com/client/T08PSQ7BQ/C03B4CWV4DA) channel.
-2. Post in the room with an introduction to yourself, what area you are
-   interested in (check issues marked with [help
-   wanted](https://github.com/open-telemetry/opentelemetry-demo/labels/help%20wanted)),
-   and say you are looking for a buddy. We will match you with someone who has
-   experience in that area.
-
-Your OpenTelemetry buddy is your resource to talk to directly on all aspects of
-contributing to OpenTelemetry: providing context, reviewing PRs, and helping
-those get merged. Buddies will not be available 24/7, but is committed to
-responding during their normal contribution hours.
+This project follows
+[Google's Open Source Community Guidelines](https://opensource.google/conduct/).
 
 ## Development Environment
 
