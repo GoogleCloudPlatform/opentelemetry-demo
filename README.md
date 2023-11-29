@@ -13,6 +13,8 @@
 This repository containes a fork of https://github.com/open-telemetry/opentelemetry-demo,
 which integrates with Google Cloud Monitoring, Logging, and Trace.
 
+**This is not an officially supported Google product.**
+
 This repository contains the OpenTelemetry Astronomy Shop, a microservice-based
 distributed system intended to illustrate the implementation of OpenTelemetry in
 a near real-world environment.
