@@ -4,7 +4,7 @@ Welcome to OpenTelemetry Demo Webstore repository Google Cloud integration!
 
 This is the fork for the Google Cloud integration. To contribute to the demo
 itself, see
-https://github.com/open-telemetry/opentelemetry-demo/blob/main/CONTRIBUTING.md.
+[the OpenTelemetry `CONTRIBUTING.md`](https://github.com/open-telemetry/opentelemetry-demo/blob/main/CONTRIBUTING.md).
 
 If you would like to contribute to the Google Cloud integration, see
 instructions below.
@@ -184,3 +184,4 @@ on each other), the owner should try to get people aligned by:
   the owner should bring it to the OpenTelemetry Community Demo SIG
   [meeting](README.md#contributing).
 
+[docs]: https://opentelemetry.io/docs/demo/
