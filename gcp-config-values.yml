@@ -1,0 +1,83 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# this file is used by Helm chart launch steps.
+# when merging YAML with the default values, objects are merged but lists are overwritten.
+# so, where a list is used, we have copied the defaults from the upstream values to preserve them.
+
+opentelemetry-collector:
+  # Service account for workload identity
+  serviceAccount:
+    create: true
+    annotations: {"iam.gke.io/gcp-service-account":"opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"}
+    name: "opentelemetry-demo"
+
+  config:
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 65
+        spike_limit_percentage: 20
+
+      batch:
+        send_batch_max_size: 200
+        send_batch_size: 200
+        timeout: 5s
+
+      resourcedetection:
+        detectors: [gcp]
+        timeout: 10s
+
+      transform/collision:
+        metric_statements:
+        - context: datapoint
+          statements:
+          - set(attributes["exported_location"], attributes["location"])
+          - delete_key(attributes, "location")
+          - set(attributes["exported_cluster"], attributes["cluster"])
+          - delete_key(attributes, "cluster")
+          - set(attributes["exported_namespace"], attributes["namespace"])
+          - delete_key(attributes, "namespace")
+          - set(attributes["exported_job"], attributes["job"])
+          - delete_key(attributes, "job")
+          - set(attributes["exported_instance"], attributes["instance"])
+          - delete_key(attributes, "instance")
+          - set(attributes["exported_project_id"], attributes["project_id"])
+          - delete_key(attributes, "project_id")
+
+      # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
+      filter/currency:
+        metrics:
+          metric:
+          - 'IsMatch(name, "(.*)app_currency(.*)")'
+
+    exporters:
+      googlecloud:
+        log:
+          default_log_name: opentelemetry.io/opentelemetry-demo
+
+      googlemanagedprometheus:
+
+    service:
+      pipelines:
+        logs:
+          processors: [memory_limiter, resourcedetection, resource, batch]
+          exporters: [googlecloud]
+        traces:
+          processors: [memory_limiter, resourcedetection, resource, batch]
+          exporters: [googlecloud] #spanmetrics disabled
+        metrics:
+          receivers: [otlp] #spanmetrics disabled
+          processors: [filter/ottl, filter/currency, memory_limiter, resourcedetection, transform, transform/collision, resource, batch]
+          exporters: [googlemanagedprometheus]
