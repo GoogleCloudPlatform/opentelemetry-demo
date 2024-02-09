@@ -204,4 +204,3 @@ Maintainers can create a new release when desired by following these steps.
   committing the changes.
 
 [docs]: https://opentelemetry.io/docs/demo/
-
