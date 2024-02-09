@@ -12,6 +12,12 @@
 
 ## Welcome to the OpenTelemetry Astronomy Shop Demo with Google Cloud
 
+This repository contains a fork of [open-telemetry/opentelemetry-demo](https://github.com/open-telemetry/opentelemetry-demo),
+which integrates with Google Cloud Monitoring, Logging, and Trace.
+
+**This is not an officially supported Google product.**
+
+For details on how to use this with GCP, see [`README_GCP.md`](README_GCP.md).
 This repository containes a fork of https://github.com/open-telemetry/opentelemetry-demo,
 which integrates with Google Cloud Monitoring, Logging, and Trace.
 
