@@ -4,6 +4,9 @@
 # extra settings to be merged into OpenTelemetry Collector configuration
 # do not delete this file
 
+# this file is used by docker-compose launch steps. it is merged with the default Collector
+# config in otelcol-config.yaml.
+
 ## Example configuration for sending data to your own OTLP HTTP backend
 ## Note: the spanmetrics exporter must be included in the exporters array
 ## if overriding the traces pipeline.
@@ -16,3 +19,59 @@
 #    pipelines:
 #      traces:
 #        exporters: [spanmetrics, otlphttp/example]
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 65
+    spike_limit_percentage: 20
+
+  batch:
+    send_batch_max_size: 200
+    send_batch_size: 200
+    timeout: 5s
+
+  resourcedetection:
+    detectors: [gcp]
+    timeout: 10s
+
+  transform/collision:
+    metric_statements:
+    - context: datapoint
+      statements:
+      - set(attributes["exported_location"], attributes["location"])
+      - delete_key(attributes, "location")
+      - set(attributes["exported_cluster"], attributes["cluster"])
+      - delete_key(attributes, "cluster")
+      - set(attributes["exported_namespace"], attributes["namespace"])
+      - delete_key(attributes, "namespace")
+      - set(attributes["exported_job"], attributes["job"])
+      - delete_key(attributes, "job")
+      - set(attributes["exported_instance"], attributes["instance"])
+      - delete_key(attributes, "instance")
+      - set(attributes["exported_project_id"], attributes["project_id"])
+      - delete_key(attributes, "project_id")
+
+  # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
+  filter/currency:
+    metrics:
+      metric:
+      - 'IsMatch(name, "(.*)app_currency(.*)")'
+
+exporters:
+  googlecloud:
+
+  googlemanagedprometheus:
+
+service:
+  pipelines:
+    logs:
+      processors: [memory_limiter, resourcedetection, resource, batch]
+      exporters: [googlecloud]
+    traces:
+      processors: [memory_limiter, resourcedetection, resource, batch]
+      exporters: [googlecloud] #spanmetrics disabled
+    metrics:
+      receivers: [otlp] #spanmetrics disabled
+      processors: [filter/ottl, filter/currency, memory_limiter, resourcedetection, transform, transform/collision, resource, batch]
+      exporters: [googlemanagedprometheus]
