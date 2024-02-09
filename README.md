@@ -23,6 +23,8 @@ which integrates with Google Cloud Monitoring, Logging, and Trace.
 
 **This is not an officially supported Google product.**
 
+For details on how to use this with GCP, see [`README_GCP.md`](README_GCP.md).
+
 This repository contains the OpenTelemetry Astronomy Shop, a microservice-based
 distributed system intended to illustrate the implementation of OpenTelemetry in
 a near real-world environment.
