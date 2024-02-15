@@ -60,18 +60,20 @@ processors:
 
 exporters:
   googlecloud:
+    log:
+      default_log_name: opentelemetry.io/opentelemetry-demo
 
   googlemanagedprometheus:
 
 service:
   pipelines:
     logs:
-      processors: [memory_limiter, resourcedetection, resource, batch]
+      processors: [memory_limiter, resourcedetection, batch]
       exporters: [googlecloud]
     traces:
-      processors: [memory_limiter, resourcedetection, resource, batch]
+      processors: [memory_limiter, resourcedetection, batch]
       exporters: [googlecloud] #spanmetrics disabled
     metrics:
       receivers: [otlp] #spanmetrics disabled
-      processors: [filter/ottl, filter/currency, memory_limiter, resourcedetection, transform, transform/collision, resource, batch]
+      processors: [filter/currency, memory_limiter, resourcedetection, transform/collision, batch]
       exporters: [googlemanagedprometheus]
