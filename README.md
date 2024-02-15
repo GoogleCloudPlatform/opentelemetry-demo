@@ -6,6 +6,7 @@
 [![Commits](https://img.shields.io/github/commits-since/open-telemetry/opentelemetry-demo/latest?color=ff69b4&include_prereleases)](https://github.com/open-telemetry/opentelemetry-demo/graphs/commit-activity)
 [![Downloads](https://img.shields.io/docker/pulls/otel/demo)](https://hub.docker.com/r/otel/demo)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?color=red)](https://github.com/open-telemetry/opentelemetry-demo/blob/main/LICENSE)
+[![Integration Tests](https://github.com/open-telemetry/opentelemetry-demo/actions/workflows/run-integration-tests.yml/badge.svg)](https://github.com/open-telemetry/opentelemetry-demo/actions/workflows/run-integration-tests.yml)
 
 ## Welcome to the OpenTelemetry Astronomy Shop Demo with Google Cloud
 
@@ -62,15 +63,16 @@ keeping it up to date for you.
 
 |                                         |                             |                                                                |
 |-----------------------------------------|-----------------------------|----------------------------------------------------------------|
-| [AlibabaCloud LogService][AlibabaCloud] | [Elastic][Elastic]          | [OpenSearch][OpenSearch]                                       |
-| [AppDynamics][AppDynamics]              | [Grafana Labs][GrafanaLabs] | [Sentry][Sentry]                                               |
-| [Aspecto][Aspecto]                      | [Guance][Guance]            | [ServiceNow Cloud Observability][ServiceNowCloudObservability] |
-| [Axiom][Axiom]                          | [Helios][Helios]            | [Splunk][Splunk]                                               |
-| [Axoflow][Axoflow]                      | [Honeycomb.io][Honeycombio] | [Sumo Logic][SumoLogic]                                        |
-| [Azure Data Explorer][Azure]            | [Instana][Instana]          | [TelemetryHub][TelemetryHub]                                   |
-| [Coralogix][Coralogix]                  | [Kloudfuse][Kloudfuse]      | [Teletrace][Teletrace]                                         |
-| [Datadog][Datadog]                      | [Logz.io][Logzio]           | [Tracetest][Tracetest]                                         |
-| [Dynatrace][Dynatrace]                  | [New Relic][NewRelic]       | [Uptrace][Uptrace]                                             |
+| [AlibabaCloud LogService][AlibabaCloud] | [Google Cloud][GoogleCloud] | [Sentry][Sentry]                                               |
+| [AppDynamics][AppDynamics]              | [Grafana Labs][GrafanaLabs] | [ServiceNow Cloud Observability][ServiceNowCloudObservability] |
+| [Aspecto][Aspecto]                      | [Guance][Guance]            | [Splunk][Splunk]                                               |
+| [Axiom][Axiom]                          | [Helios][Helios]            | [Sumo Logic][SumoLogic]                                        |
+| [Axoflow][Axoflow]                      | [Honeycomb.io][Honeycombio] | [TelemetryHub][TelemetryHub]                                   |
+| [Azure Data Explorer][Azure]            | [Instana][Instana]          | [Teletrace][Teletrace]                                         |
+| [Coralogix][Coralogix]                  | [Kloudfuse][Kloudfuse]      | [Tracetest][Tracetest]                                         |
+| [Datadog][Datadog]                      | [Logz.io][Logzio]           | [Uptrace][Uptrace]                                             |
+| [Dynatrace][Dynatrace]                  | [New Relic][NewRelic]       |                                                                |
+| [Elastic][Elastic]                      | [OpenSearch][OpenSearch]    |                                                                |
 
 ## Contributing
 
@@ -85,7 +87,7 @@ Monday at 8:30 AM PST and anyone is welcome.
 
 - [Austin Parker](https://github.com/austinlparker), Honeycomb
 - [Carter Socha](https://github.com/cartersocha), Lightstep
-- [Juliano Costa](https://github.com/julianocosta89), Dynatrace
+- [Juliano Costa](https://github.com/julianocosta89), Datadog
 - [Pierre Tessier](https://github.com/puckpuck), Honeycomb
 
 [Approvers](https://github.com/open-telemetry/community/blob/main/community-membership.md#approver)
@@ -120,6 +122,7 @@ Emeritus:
 [Datadog]: https://github.com/DataDog/opentelemetry-demo
 [Dynatrace]: https://www.dynatrace.com/news/blog/opentelemetry-demo-application-with-dynatrace/
 [Elastic]: https://github.com/elastic/opentelemetry-demo
+[GoogleCloud]: https://github.com/GoogleCloudPlatform/opentelemetry-demo
 [GrafanaLabs]: https://github.com/grafana/opentelemetry-demo
 [Guance]: https://github.com/GuanceCloud/opentelemetry-demo
 [Helios]: https://otelsandbox.gethelios.dev
