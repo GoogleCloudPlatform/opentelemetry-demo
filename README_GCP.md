@@ -59,7 +59,7 @@ Follow the [OpenTelemetry docs to run the Helm chart](https://opentelemetry.io/d
 ```console
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 helm repo update
-helm install my-otel-demo open-telemetry/opentelemetry-demo --values gcp-config-values.yml
+helm install my-otel-demo open-telemetry/opentelemetry-demo --values gcp-config-values.yml --version 0.29.1
 ```
 
 ## Running on GCE
