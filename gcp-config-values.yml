@@ -79,5 +79,5 @@ opentelemetry-collector:
           exporters: [googlecloud] #spanmetrics disabled
         metrics:
           receivers: [otlp] #spanmetrics disabled
-          processors: [filter/ottl, filter/currency, memory_limiter, resourcedetection, transform, transform/collision, resource, batch]
+          processors: [filter/currency, memory_limiter, resourcedetection, transform/collision, resource, batch]
           exporters: [googlemanagedprometheus]
