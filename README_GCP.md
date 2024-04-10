@@ -69,7 +69,7 @@ Installing with the Helm chart is recommended, but you can also use `kubectl app
 
 First, make sure you have followed the Workload Identity setup steps above.
 
-Update [`gcp-config-valus.yml`](gcp-config-values.yml) to annotate the
+Update [`kubernetes/opentelemetry-demo.yaml`](kubernetes/opentelemetry-demo.yaml) to annotate the
 Kubernetes service account with your project:
 
 ```console
