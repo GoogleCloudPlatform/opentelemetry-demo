@@ -179,10 +179,21 @@ data:
         endpoint: http://opentelemetry-demo-prometheus-server:9090/api/v1/otlp
         tls:
           insecure: true
+
+      googlecloud:
+        log:
+          default_log_name: opentelemetry.io/opentelemetry-demo
+
+      googlemanagedprometheus:
+
     extensions:
       health_check: {}
     processors:
-      batch: {}
+      batch:
+        send_batch_max_size: 200
+        send_batch_size: 200
+        timeout: 5s
+
       filter/ottl:
         error_mode: ignore
         metrics:
@@ -212,14 +223,18 @@ data:
         - sources:
           - from: connection
       memory_limiter:
-        check_interval: 5s
-        limit_percentage: 80
-        spike_limit_percentage: 25
+        check_interval: 1s
+        limit_percentage: 65
+        spike_limit_percentage: 20
       resource:
         attributes:
         - action: insert
           from_attribute: k8s.pod.uid
           key: service.instance.id
+      resourcedetection:
+        detectors: [gcp]
+        timeout: 10s
+
       transform:
         metric_statements:
         - context: metric
@@ -227,6 +242,29 @@ data:
           - set(description, "") where name == "queueSize"
           - set(description, "") where name == "rpc.server.duration"
           - set(description, "") where name == "http.client.duration"
+      transform/collision:
+        metric_statements:
+        - context: datapoint
+          statements:
+          - set(attributes["exported_location"], attributes["location"])
+          - delete_key(attributes, "location")
+          - set(attributes["exported_cluster"], attributes["cluster"])
+          - delete_key(attributes, "cluster")
+          - set(attributes["exported_namespace"], attributes["namespace"])
+          - delete_key(attributes, "namespace")
+          - set(attributes["exported_job"], attributes["job"])
+          - delete_key(attributes, "job")
+          - set(attributes["exported_instance"], attributes["instance"])
+          - delete_key(attributes, "instance")
+          - set(attributes["exported_project_id"], attributes["project_id"])
+          - delete_key(attributes, "project_id")
+
+      # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
+      filter/currency:
+        metrics:
+          metric:
+          - 'IsMatch(name, "(.*)app_currency(.*)")'
+
     receivers:
       jaeger:
         protocols:
@@ -262,41 +300,43 @@ data:
       pipelines:
         logs:
           exporters:
-          - debug
+          - googlecloud
           processors:
           - k8sattributes
+          - resourcedetection
+          - resource
           - memory_limiter
           - batch
           receivers:
           - otlp
         metrics:
           exporters:
-          - otlphttp/prometheus
-          - debug
+          - googlemanagedprometheus
           processors:
           - k8sattributes
           - memory_limiter
           - filter/ottl
+          - filter/currency
+          - resourcedetection
           - transform
+          - transform/collision
           - resource
           - batch
           receivers:
           - otlp
-          - spanmetrics
+          #- spanmetrics
         traces:
           exporters:
-          - otlp
-          - debug
-          - spanmetrics
+          - googlecloud
+          #- spanmetrics
           processors:
           - k8sattributes
           - memory_limiter
+          - resourcedetection
           - resource
           - batch
           receivers:
           - otlp
-          - jaeger
-          - zipkin
       telemetry:
         metrics:
           address: ${env:MY_POD_IP}:8888
