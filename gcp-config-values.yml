@@ -21,7 +21,7 @@ opentelemetry-collector:
   serviceAccount:
     create: true
     annotations: {"iam.gke.io/gcp-service-account":"opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"}
-    name: "opentelemetry-demo"
+    name: "opentelemetry-demo-otelcol"
 
   config:
     processors:
