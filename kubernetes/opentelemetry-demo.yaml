@@ -35,6 +35,8 @@ kind: ServiceAccount
 metadata:
   name: opentelemetry-demo-otelcol
   namespace: otel-demo
+  annotations:
+    iam.gke.io/gcp-service-account: "opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
