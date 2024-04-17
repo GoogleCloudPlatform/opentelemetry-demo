@@ -38,7 +38,7 @@ gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
     --role "roles/cloudtrace.agent"
 gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com \
     --role roles/iam.workloadIdentityUser \
-    --member "serviceAccount:${GCLOUD_PROJECT}.svc.id.goog[default/opentelemetry-demo]"
+    --member "serviceAccount:${GCLOUD_PROJECT}.svc.id.goog[otel-demo/opentelemetry-demo-otelcol]"
 ```
 
 Update [`gcp-config-valus.yml`](gcp-config-values.yml) to annotate the
@@ -57,9 +57,31 @@ service account and annotate it to use Workload Identity.
 Follow the [OpenTelemetry docs to run the Helm chart](https://opentelemetry.io/docs/demo/kubernetes-deployment):
 
 ```console
+kubectl create namespace otel-demo
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 helm repo update
-helm install my-otel-demo open-telemetry/opentelemetry-demo --values gcp-config-values.yml --version 0.29.1
+helm install my-otel-demo open-telemetry/opentelemetry-demo --namespace otel-demo --values gcp-config-values.yml --version 0.29.1
+```
+
+### (Alternative) Using `kubectl apply`
+
+Installing with the Helm chart is recommended, but you can also use `kubectl
+apply` to install the manifests directly.
+
+First, make sure you have followed the Workload Identity setup steps above.
+
+Update
+[`kubernetes/opentelemetry-demo.yaml`](kubernetes/opentelemetry-demo.yaml) to
+annotate the Kubernetes service account with your project:
+
+```console
+sed -i "s/%GCLOUD_PROJECT%/${GCLOUD_PROJECT}/g" ./kubernetes/opentelemetry-demo.yaml
+```
+
+Install the manifests:
+
+```console
+kubectl apply -n otel-demo -f ./kubernetes/opentelemetry-demo.yaml
 ```
 
 ## Running on GCE
