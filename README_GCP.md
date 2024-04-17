@@ -65,12 +65,14 @@ helm install my-otel-demo open-telemetry/opentelemetry-demo --namespace otel-dem
 
 ### (Alternative) Using `kubectl apply`
 
-Installing with the Helm chart is recommended, but you can also use `kubectl apply` to install the manifests directly.
+Installing with the Helm chart is recommended, but you can also use `kubectl
+apply` to install the manifests directly.
 
 First, make sure you have followed the Workload Identity setup steps above.
 
-Update [`kubernetes/opentelemetry-demo.yaml`](kubernetes/opentelemetry-demo.yaml) to annotate the
-Kubernetes service account with your project:
+Update
+[`kubernetes/opentelemetry-demo.yaml`](kubernetes/opentelemetry-demo.yaml) to
+annotate the Kubernetes service account with your project:
 
 ```console
 sed -i "s/%GCLOUD_PROJECT%/${GCLOUD_PROJECT}/g" ./kubernetes/opentelemetry-demo.yaml
