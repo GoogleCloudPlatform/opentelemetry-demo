@@ -19,6 +19,8 @@ steps:
   script: |
     #!/usr/bin/env bash
     sed -i "s/%GCLOUD_PROJECT%/${PROJECT_ID}/g" ./kubernetes/opentelemetry-demo.yaml
+  env:
+  - 'PROJECT_ID=$PROJECT_ID'
 
 # deploy the manifests to the otel-demo namespace in GKE
 - name: 'gcr.io/cloud-builders/kubectl'
