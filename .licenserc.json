@@ -46,6 +46,7 @@
         "src/featureflagservice/priv/",
         "src/productcatalogservice/genproto/",
         "internal/tools/",
-        "gcp-config-values.yml"
+        "gcp-config-values.yml",
+        "cloudbuild-deploy.yaml"
     ]
   }
