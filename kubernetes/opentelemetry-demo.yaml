@@ -261,12 +261,6 @@ data:
           - set(attributes["exported_project_id"], attributes["project_id"])
           - delete_key(attributes, "project_id")
 
-      # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
-      filter/currency:
-        metrics:
-          metric:
-          - 'IsMatch(name, "(.*)app_currency(.*)")'
-
     receivers:
       jaeger:
         protocols:
@@ -318,7 +312,6 @@ data:
           - k8sattributes
           - memory_limiter
           - filter/ottl
-          - filter/currency
           - resourcedetection
           - transform
           - transform/collision
