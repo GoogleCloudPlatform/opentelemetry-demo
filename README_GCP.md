@@ -1,8 +1,8 @@
 # Running the demo on Google Cloud
 
 The demo can send logs, traces, and metrics to Google Cloud. The easiest way to
-do this is with the [`gcp-config-values.yml`](gcp-config-values.yml) file (when
-deploying via Helm on GKE) or
+do this is with the [`gcp/helmfile.yaml`](gcp/helmfile.yaml) (when
+deploying via Helmfile on GKE) or
 [`src/otelcollector/otelcol-config-extras.yml`](src/otelcollector/otelcol-config-extras.yml)
 when running with `docker-compose` on GCE.
 
@@ -41,26 +41,22 @@ gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_P
     --member "serviceAccount:${GCLOUD_PROJECT}.svc.id.goog[otel-demo/opentelemetry-demo-otelcol]"
 ```
 
-Update [`gcp-config-valus.yml`](gcp-config-values.yml) to annotate the
-Kubernetes service account with your project:
+### Deploying the Helmfile
+
+Make sure you have
+[Helmfile](https://helmfile.readthedocs.io/en/stable/#installation) and
+[Helm](https://helm.sh/docs/intro/install/) installed.
+
+Without Workload Identity, run
 
 ```console
-sed -i "s/%GCLOUD_PROJECT%/${GCLOUD_PROJECT}/g" gcp-config-values.yml
+helmfile --interactive apply -f gcp/helmfile.yaml
 ```
 
-Next, when you deploy the Helm chart, the
-[`gcp-config-values.yml`](gcp-config-values.yml) file will create the Kubernetes
-service account and annotate it to use Workload Identity.
-
-### Deploying the Helm chart
-
-Follow the [OpenTelemetry docs to run the Helm chart](https://opentelemetry.io/docs/demo/kubernetes-deployment):
+With Workload Identity, run
 
 ```console
-kubectl create namespace otel-demo
-helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-helm repo update
-helm install my-otel-demo open-telemetry/opentelemetry-demo --namespace otel-demo --values gcp-config-values.yml --version 0.29.1
+helmfile --interactive apply -f gcp/helmfile.yaml --state-values-set-string workload_identity_project_id=${GCLOUD_PROJECT}
 ```
 
 ### (Alternative) Using `kubectl apply`
