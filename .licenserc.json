@@ -47,7 +47,7 @@
         "src/productcatalogservice/genproto/",
         "internal/tools/",
         "kubernetes/service-directory-registration.yaml",
-        "gcp-config-values.yml",
+        "gcp/",
         "cloudbuild-deploy.yaml"
     ]
   }
