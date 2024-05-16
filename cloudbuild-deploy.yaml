@@ -14,11 +14,12 @@
 
 steps:
 # set the project ID in the k8s manifest for service account/workload identity
-- name: 'ubuntu'
-  id: Replace
+- name: ghcr.io/helmfile/helmfile
+  id: Generate
   script: |
     #!/usr/bin/env bash
-    sed -i "s/%GCLOUD_PROJECT%/${PROJECT_ID}/g" ./kubernetes/opentelemetry-demo.yaml
+    apk add make
+    make generate-kubernetes-manifests HELMFILE_FLAGS="--environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID"
   env:
   - 'PROJECT_ID=$PROJECT_ID'
 

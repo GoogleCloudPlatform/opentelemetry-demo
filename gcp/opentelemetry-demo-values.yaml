@@ -16,11 +16,28 @@
 # when merging YAML with the default values, objects are merged but lists are overwritten.
 # so, where a list is used, we have copied the defaults from the upstream values to preserve them.
 
+# Disable redundant built-in monitoring tools
+prometheus:
+  enabled: false
+grafana:
+  enabled: false
+opensearch:
+  enabled: false
+jaeger:
+  enabled: false
+
+components:
+  frontendProxy:
+    service:
+      type: LoadBalancer
+      annotations:
+        networking.gke.io/internal-load-balancer-allow-global-access: "true"
+        networking.gke.io/load-balancer-type: Internal
+
 opentelemetry-collector:
   # Service account for workload identity
   serviceAccount:
     create: true
-    annotations: {"iam.gke.io/gcp-service-account":"opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"}
     name: "opentelemetry-demo-otelcol"
 
   config:
@@ -67,17 +84,22 @@ opentelemetry-collector:
         log:
           default_log_name: opentelemetry.io/opentelemetry-demo
 
-      googlemanagedprometheus:
+      googlemanagedprometheus: {}
+
+      # Disable unused exporters
+      opensearch: null
+      otlp: null
+      otlphttp/prometheus: null
 
     service:
       pipelines:
         logs:
-          processors: [memory_limiter, resourcedetection, resource, batch]
+          processors: [resourcedetection, resource, memory_limiter, batch]
           exporters: [googlecloud]
         traces:
           processors: [memory_limiter, resourcedetection, resource, batch]
-          exporters: [googlecloud] #spanmetrics disabled
+          exporters: [googlecloud]  # spanmetrics disabled
         metrics:
-          receivers: [otlp] #spanmetrics disabled
-          processors: [filter/currency, memory_limiter, resourcedetection, transform/collision, resource, batch]
+          receivers: [otlp]  # spanmetrics disabled
+          processors: [memory_limiter, filter/currency, resourcedetection, transform/collision, resource, batch]
           exporters: [googlemanagedprometheus]
