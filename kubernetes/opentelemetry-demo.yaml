@@ -8589,8 +8589,11 @@ metadata:
     app.kubernetes.io/name: opentelemetry-demo-frontendproxy
     app.kubernetes.io/version: "1.7.0"
     app.kubernetes.io/part-of: opentelemetry-demo
+  annotations:
+    networking.gke.io/internal-load-balancer-allow-global-access: "true"
+    networking.gke.io/load-balancer-type: Internal
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 8080
       name: tcp-service
