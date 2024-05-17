@@ -12,25 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-steps:
-# set the project ID in the k8s manifest for service account/workload identity
-- name: 'ubuntu'
-  id: Replace
-  script: |
-    #!/usr/bin/env bash
-    sed -i "s/%GCLOUD_PROJECT%/${PROJECT_ID}/g" ./kubernetes/opentelemetry-demo.yaml
-  env:
-  - 'PROJECT_ID=$PROJECT_ID'
-
-# deploy the manifests to the otel-demo namespace in GKE
-- name: 'gcr.io/cloud-builders/kubectl'
-  id: Deploy
-  args:
-  - 'apply'
-  - '-n'
-  - 'otel-demo'
-  - '-f'
-  - './kubernetes/.'
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=${LOCATION}'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+# This resource registers kubernetes services with the GCP service directory so
+# they can be used for uptime checks. See
+# https://cloud.google.com/service-directory/docs/sd-gke-overview.
+apiVersion: networking.gke.io/v1alpha1
+kind: ServiceDirectoryRegistrationPolicy
+metadata:
+  # Only the name "default" is allowed.
+  name: default
+spec:
+  resources:
+    - kind: Service
+      # match the frontendproxy service
+      selector:
+        matchLabels:
+          app.kubernetes.io/part-of: "opentelemetry-demo"
+          app.kubernetes.io/component: frontendproxy

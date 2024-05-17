@@ -46,6 +46,7 @@
         "src/featureflagservice/priv/",
         "src/productcatalogservice/genproto/",
         "internal/tools/",
+        "kubernetes/service-directory-registration.yaml",
         "gcp-config-values.yml",
         "cloudbuild-deploy.yaml"
     ]
