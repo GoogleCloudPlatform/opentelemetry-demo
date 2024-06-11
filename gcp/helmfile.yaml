@@ -21,8 +21,9 @@ environments:
     values:
       - namespace: otel-demo
   cicd:
-    values: []
-    # namespace must be specified on the command line
+    values:
+      - single_namespace: true
+      # namespace must be specified on the command line
 ---
 repositories:
   - name: open-telemetry
@@ -36,3 +37,4 @@ releases:
     values:
       - opentelemetry-demo-values.yaml
       - opentelemetry-demo-workload-identity.yaml.gotmpl
+      - opentelemetry-demo-cicd.yaml.gotmpl
