@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +41,14 @@ opentelemetry-collector:
     name: "opentelemetry-demo-otelcol"
 
   config:
+    extensions:
+      googleclientauth:
+        project: PROJECT_ID
+        quota_project: PROJECT_ID
+        scopes:
+          - "https://www.googleapis.com/auth/trace.append"
+          - "https://www.googleapis.com/auth/cloud-platform"
+
     processors:
       memory_limiter:
         check_interval: 1s
@@ -80,6 +88,12 @@ opentelemetry-collector:
           - 'IsMatch(name, "(.*)app_currency(.*)")'
 
     exporters:
+      otlphttp:
+        endpoint: https://us-central1-telemetry.googleapis.com:443
+        encoding: json
+        auth:
+          authenticator: googleclientauth
+
       googlecloud:
         log:
           default_log_name: opentelemetry.io/opentelemetry-demo
@@ -92,13 +106,14 @@ opentelemetry-collector:
       otlphttp/prometheus: null
 
     service:
+      extensions: [health_check, googleclientauth]
       pipelines:
         logs:
           processors: [resourcedetection, resource, memory_limiter, batch]
           exporters: [googlecloud]
         traces:
           processors: [memory_limiter, resourcedetection, resource, batch]
-          exporters: [googlecloud]  # spanmetrics disabled
+          exporters: [googlecloud, otlphttp]  # spanmetrics disabled
         metrics:
           receivers: [otlp]  # spanmetrics disabled
           processors: [memory_limiter, filter/currency, resourcedetection, transform/collision, resource, batch]

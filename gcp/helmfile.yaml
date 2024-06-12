@@ -16,6 +16,8 @@ environments:
   default:
     values:
       - workload_identity_project_id: "%GCLOUD_PROJECT%"
+        auth_extension_project_id: "%GCLOUD_PROJECT%"
+        auth_extension_quota_project_id: "%GCLOUD_PROJECT%"
         namespace: otel-demo
   production:
     values:
