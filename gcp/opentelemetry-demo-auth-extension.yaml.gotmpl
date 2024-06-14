@@ -13,12 +13,32 @@
 # limitations under the License.
 
 opentelemetry-collector:
+{{- if .Values.otlp_endpoint }}
   config:
+    exporters:
+      otlphttp:
+{{ with .Values | getOrNil "otlp_endpoint" }}
+        endpoint: "{{ . }}"
+{{ end }}
+        encoding: json
+        auth:
+          authenticator: googleclientauth
+
     extensions:
       googleclientauth:
+        scopes:
+        - "https://www.googleapis.com/auth/trace.append"
+        - "https://www.googleapis.com/auth/cloud-platform"
 {{ with .Values | getOrNil "auth_extension_project_id" }}
         project: "{{ . }}"
 {{ end }}
 {{ with .Values | getOrNil "auth_extension_quota_project_id" }}
         quota_project: "{{ . }}"
 {{ end }}
+
+    service:
+      extensions: [health_check, googleclientauth]
+      pipelines:
+        traces:
+          exporters: [googlecloud, otlphttp]
+{{- end }}

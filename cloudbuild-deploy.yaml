@@ -19,7 +19,7 @@ steps:
   script: |
     #!/usr/bin/env bash
     apk add make
-    make generate-kubernetes-manifests HELMFILE_FLAGS="--environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID --state-value-set-string auth_extension_project_id=$PROJECT_ID --state-value-set-string auth_extension_quota_project_id=$PROJECT_ID --state-value-set-string collector_image_repository='us-central1-docker.pkg.dev/${PROJECT_ID}/otel/opentelemetry-collector-contrib' --state-alue-set-string collector_image_tag=0.102.0"
+    make generate-kubernetes-manifests HELMFILE_FLAGS="--environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID --state-value-set-string auth_extension_project_id=$PROJECT_ID --state-value-set-string auth_extension_quota_project_id=$PROJECT_ID --state-value-set-string collector_image_repository='us-central1-docker.pkg.dev/${PROJECT_ID}/otel/opentelemetry-collector-contrib' --state-value-set-string collector_image_tag=0.102.0 --state-value-set-string otlp_endpoint=https://us-central1-telemetry.googleapis.com:443"
   env:
   - 'PROJECT_ID=$PROJECT_ID'
 

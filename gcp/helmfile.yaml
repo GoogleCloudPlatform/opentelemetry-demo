@@ -16,11 +16,12 @@ environments:
   default:
     values:
       - workload_identity_project_id: "%GCLOUD_PROJECT%"
-        auth_extension_project_id: "%GCLOUD_PROJECT%"
-        auth_extension_quota_project_id: "%GCLOUD_PROJECT%"
-        collector_image_repository: ""
-        collector_image_tag: ""
         namespace: otel-demo
+        #otlp_endpoint: ""
+        #auth_extension_project_id: "%GCLOUD_PROJECT%"
+        #auth_extension_quota_project_id: "%GCLOUD_PROJECT%"
+        #collector_image_repository: ""
+        #collector_image_tag: ""
   production:
     values:
       - namespace: otel-demo

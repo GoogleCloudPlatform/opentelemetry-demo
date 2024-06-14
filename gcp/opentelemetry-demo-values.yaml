@@ -88,12 +88,6 @@ opentelemetry-collector:
           - 'IsMatch(name, "(.*)app_currency(.*)")'
 
     exporters:
-      otlphttp:
-        endpoint: https://us-central1-telemetry.googleapis.com:443
-        encoding: json
-        auth:
-          authenticator: googleclientauth
-
       googlecloud:
         log:
           default_log_name: opentelemetry.io/opentelemetry-demo
@@ -106,14 +100,13 @@ opentelemetry-collector:
       otlphttp/prometheus: null
 
     service:
-      extensions: [health_check, googleclientauth]
       pipelines:
         logs:
           processors: [resourcedetection, resource, memory_limiter, batch]
           exporters: [googlecloud]
         traces:
           processors: [memory_limiter, resourcedetection, resource, batch]
-          exporters: [googlecloud, otlphttp]  # spanmetrics disabled
+          exporters: [googlecloud]  # spanmetrics disabled
         metrics:
           receivers: [otlp]  # spanmetrics disabled
           processors: [memory_limiter, filter/currency, resourcedetection, transform/collision, resource, batch]

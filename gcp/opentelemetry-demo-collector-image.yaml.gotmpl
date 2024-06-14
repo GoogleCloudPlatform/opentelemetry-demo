@@ -13,10 +13,14 @@
 # limitations under the License.
 
 opentelemetry-collector:
+{{- if .Values.collector_image_repository }}
   image:
 {{ with .Values | getOrNil "collector_image_repository" }}
     repository: "{{ . }}"
 {{ end }}
+{{- if .Values.collector_image_tag }}
 {{ with .Values | getOrNil "collector_image_tag" }}
     tag: "{{ . }}"
 {{ end }}
+{{- end}}
+{{- end}}
