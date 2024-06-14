@@ -35,12 +35,6 @@ components:
         networking.gke.io/load-balancer-type: Internal
 
 opentelemetry-collector:
-  # Override upstream image
-  # Remove once https://github.com/open-telemetry/opentelemetry-collector-releases/pull/577 is released and we have updated to the latest upstream helm chart values
-  image:
-    repository: "us-central1-docker.pkg.dev/gcp-telemetry-sandbox/otel/opentelemetry-collector-contrib"
-    tag: "0.102.0"
-
   # Service account for workload identity
   serviceAccount:
     create: true
