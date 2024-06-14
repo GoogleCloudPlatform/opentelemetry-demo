@@ -24,19 +24,19 @@ opentelemetry-collector:
       "iam.gke.io/gcp-service-account": "opentelemetry-demo@{{ . }}.iam.gserviceaccount.com"
 {{ end }}
 
-{{- if .Values.collector_image_repository }}
+{{ if .Values.collector_image_repository }}
   image:
 {{ with .Values | getOrNil "collector_image_repository" }}
     repository: "{{ . }}"
 {{ end }}
-{{- if .Values.collector_image_tag }}
+{{ if .Values.collector_image_tag }}
 {{ with .Values | getOrNil "collector_image_tag" }}
     tag: "{{ . }}"
 {{ end }}
-{{- end}}
-{{- end}}
+{{ end}}
+{{ end}}
 
-{{- if .Values.otlp_endpoint }}
+{{ if .Values.otlp_endpoint }}
   config:
     exporters:
       otlphttp:
@@ -46,6 +46,18 @@ opentelemetry-collector:
         encoding: json
         auth:
           authenticator: googleclientauth
+
+    processors:
+      resource:
+        attributes:
+        - action: insert
+          from_attribute: k8s.pod.uid
+          key: service.instance.id
+        - action: insert
+{{ with .Values | getOrNil "auth_extension_project_id" }}
+          value: "{{ . }}"
+{{ end }}
+          key: gcp.project_id
 
     extensions:
       googleclientauth:
@@ -64,4 +76,4 @@ opentelemetry-collector:
       pipelines:
         traces:
           exporters: [googlecloud, otlphttp]
-{{- end }}
+{{ end }}
