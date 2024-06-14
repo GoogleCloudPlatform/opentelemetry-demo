@@ -55,18 +55,7 @@ data:
         log:
           default_log_name: opentelemetry.io/opentelemetry-demo
       googlemanagedprometheus: {}
-      otlphttp:
-        auth:
-          authenticator: googleclientauth
-        encoding: json
-        endpoint: https://us-central1-telemetry.googleapis.com:443
     extensions:
-      googleclientauth:
-        project: PROJECT_ID
-        quota_project: PROJECT_ID
-        scopes:
-        - https://www.googleapis.com/auth/trace.append
-        - https://googleapis.com/auth/cloud-platform
       health_check:
         endpoint: ${env:MY_POD_IP}:13133
     processors:
@@ -168,7 +157,6 @@ data:
     service:
       extensions:
       - health_check
-      - googleclientauth
       pipelines:
         logs:
           exporters:
@@ -197,7 +185,6 @@ data:
         traces:
           exporters:
           - googlecloud
-          - otlphttp
           processors:
           - k8sattributes
           - memory_limiter
@@ -856,7 +843,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 48b3767049294168d4473028b64b28de99357951bf5d2aaa72ccabbd8376075f
+        checksum/config: 5272cb11e9bbb3b8e0f7a9f901e25ac84966fbd5ef4871370bdcecbab8940fcb
         opentelemetry_community_demo: "true"
         prometheus.io/port: "9464"
         prometheus.io/scrape: "true"

@@ -41,14 +41,6 @@ opentelemetry-collector:
     name: "opentelemetry-demo-otelcol"
 
   config:
-    extensions:
-      googleclientauth:
-        project: PROJECT_ID
-        quota_project: PROJECT_ID
-        scopes:
-          - "https://www.googleapis.com/auth/trace.append"
-          - "https://www.googleapis.com/auth/cloud-platform"
-
     processors:
       memory_limiter:
         check_interval: 1s
