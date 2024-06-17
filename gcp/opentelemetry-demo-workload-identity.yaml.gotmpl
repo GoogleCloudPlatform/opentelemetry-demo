@@ -39,20 +39,17 @@ opentelemetry-collector:
 {{ if .Values.otlp_endpoint }}
   config:
     exporters:
-      otlphttp:
+      otlphttp/gcp_auth:
+        encoding: json
 {{ with .Values | getOrNil "otlp_endpoint" }}
         endpoint: "{{ . }}"
 {{ end }}
-        encoding: json
         auth:
           authenticator: googleclientauth
 
     processors:
-      resource:
+      resource/gcp_project_id:
         attributes:
-        - action: insert
-          from_attribute: k8s.pod.uid
-          key: service.instance.id
         - action: insert
 {{ with .Values | getOrNil "auth_extension_project_id" }}
           value: "{{ . }}"
@@ -75,5 +72,6 @@ opentelemetry-collector:
       extensions: [health_check, googleclientauth]
       pipelines:
         traces:
-          exporters: [googlecloud, otlphttp]
+          processors: [k8sattributes, memory_limiter, resourcedetection, resource, resource/gcp_project_id, batch]
+          exporters: [googlecloud, otlphttp/gcp_auth]
 {{ end }}
