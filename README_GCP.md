@@ -43,9 +43,11 @@ gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_P
 
 ### Deploying the Helmfile
 
-Make sure you have
-[Helmfile](https://helmfile.readthedocs.io/en/stable/#installation) and
-[Helm](https://helm.sh/docs/intro/install/) installed.
+Make sure you have the following installed:
+
+* [Helmfile](https://helmfile.readthedocs.io/en/stable/#installation)
+* [Helm](https://helm.sh/docs/intro/install/)
+* [helm-diff plugin](https://github.com/databus23/helm-diff)
 
 Without Workload Identity, run
 

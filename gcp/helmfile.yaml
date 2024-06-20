@@ -17,6 +17,8 @@ environments:
     values:
       - workload_identity_project_id: "%GCLOUD_PROJECT%"
         namespace: otel-demo
+        collector_image_repository: "otel/opentelemetry-collector-contrib"
+        collector_image_tag: "0.102.1"
   production:
     values:
       - namespace: otel-demo
@@ -36,5 +38,5 @@ releases:
     version: ~0.31
     values:
       - opentelemetry-demo-values.yaml
-      - opentelemetry-demo-workload-identity.yaml.gotmpl
+      - opentelemetry-demo-features.yaml.gotmpl
       - opentelemetry-demo-cicd.yaml.gotmpl
