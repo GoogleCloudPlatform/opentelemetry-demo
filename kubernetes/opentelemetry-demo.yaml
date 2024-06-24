@@ -17,9 +17,6 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: "0.105.0"
-    
-  annotations:
-    iam.gke.io/gcp-service-account: "opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"
 ---
 # Source: opentelemetry-demo/templates/serviceaccount.yaml
 apiVersion: v1
