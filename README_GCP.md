@@ -15,30 +15,28 @@ account below. Otherwise, you can skip to the next section.
 
 ### Workload Identity prequisites
 
-Follow the [Workload Identity
-docs](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to)
-to set up an IAM service account in your GCP project with permission to use
-Workload Identity and write logs, traces, and metrics:
+Grant permission using [Workload
+Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to)
+to write logs, traces, and metrics:
 
 ```console
 export GCLOUD_PROJECT=<your project id>
+export PROJECT_NUMBER=$(gcloud projects describe ${GCLOUD_PROJECT} --format='get(projectNumber)')
 ```
 
 ```console
-gcloud iam service-accounts create opentelemetry-demo \
-    --project=${GCLOUD_PROJECT}
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "serviceAccount:opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/logging.logWriter"
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "serviceAccount:opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/monitoring.metricWriter"
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "serviceAccount:opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/cloudtrace.agent"
 gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role roles/iam.workloadIdentityUser \
-    --member "serviceAccount:${GCLOUD_PROJECT}.svc.id.goog[otel-demo/opentelemetry-demo-otelcol]"
 ```
 
 ### Deploying the Helmfile
@@ -49,16 +47,10 @@ Make sure you have the following installed:
 * [Helm](https://helm.sh/docs/intro/install/)
 * [helm-diff plugin](https://github.com/databus23/helm-diff)
 
-Without Workload Identity, run
+Ensure you have either configured or disabled Workload Identity in your cluster.
 
 ```console
 helmfile --interactive apply -f gcp/helmfile.yaml
-```
-
-With Workload Identity, run
-
-```console
-helmfile --interactive apply -f gcp/helmfile.yaml --state-values-set-string workload_identity_project_id=${GCLOUD_PROJECT}
 ```
 
 #### Cleaning up the helmfile
@@ -75,14 +67,6 @@ Installing with the Helm chart is recommended, but you can also use `kubectl
 apply` to install the manifests directly.
 
 First, make sure you have followed the Workload Identity setup steps above.
-
-Update
-[`kubernetes/opentelemetry-demo.yaml`](kubernetes/opentelemetry-demo.yaml) to
-annotate the Kubernetes service account with your project:
-
-```console
-sed -i "s/%GCLOUD_PROJECT%/${GCLOUD_PROJECT}/g" ./kubernetes/opentelemetry-demo.yaml
-```
 
 Install the manifests:
 
