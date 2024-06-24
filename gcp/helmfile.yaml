@@ -15,8 +15,7 @@
 environments:
   default:
     values:
-      - workload_identity_project_id: "%GCLOUD_PROJECT%"
-        namespace: otel-demo
+      - namespace: otel-demo
   production:
     values:
       - namespace: otel-demo

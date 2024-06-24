@@ -59,6 +59,7 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: "0.105.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
 ---
 # Source: opentelemetry-demo/charts/prometheus/templates/serviceaccount.yaml
 apiVersion: v1
@@ -78,6 +79,8 @@ metadata:
     
   annotations:
     iam.gke.io/gcp-service-account: "opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"
+=======
+>>>>>>> 528478e (Switch to Workload Identity Federation for GKE)
 ---
 # Source: opentelemetry-demo/templates/serviceaccount.yaml
 apiVersion: v1
