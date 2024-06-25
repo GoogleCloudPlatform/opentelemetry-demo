@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.google.protobuf.gradle.*
 
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "2.0.0"
     application
     id("java")
     id("idea")
@@ -16,7 +16,7 @@ version = "1.0"
 
 
 val grpcVersion = "1.59.0"
-val protobufVersion = "3.25.0"
+val protobufVersion = "4.27.2"
 
 
 repositories {
