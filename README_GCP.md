@@ -61,6 +61,14 @@ With Workload Identity, run
 helmfile --interactive apply -f gcp/helmfile.yaml --state-values-set-string workload_identity_project_id=${GCLOUD_PROJECT}
 ```
 
+#### Cleaning up the helmfile
+
+To clean up, run:
+
+```console
+helmfile --interactive destroy -f gcp/helmfile.yaml
+```
+
 ### (Alternative) Using `kubectl apply`
 
 Installing with the Helm chart is recommended, but you can also use `kubectl
