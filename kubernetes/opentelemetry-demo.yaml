@@ -58,6 +58,7 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: "0.105.0"
+<<<<<<< HEAD
 ---
 # Source: opentelemetry-demo/charts/prometheus/templates/serviceaccount.yaml
 apiVersion: v1
@@ -72,6 +73,8 @@ metadata:
   name: opentelemetry-demo-prometheus-server
   namespace: otel-demo
     app.kubernetes.io/version: "0.102.1"
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     
   annotations:
     iam.gke.io/gcp-service-account: "opentelemetry-demo@%GCLOUD_PROJECT%.iam.gserviceaccount.com"
@@ -87,6 +90,7 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/name: opentelemetry-demo
     app.kubernetes.io/version: "1.11.1"
+<<<<<<< HEAD
     app.kubernetes.io/part-of: opentelemetry-demo
 ---
 # Source: opentelemetry-demo/charts/grafana/templates/secret.yaml
@@ -253,6 +257,8 @@ data:
     ######## End OpenSearch Security Demo Configuration ########
 ---
     app.kubernetes.io/version: "1.10.0"
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 ---
 # Source: opentelemetry-demo/charts/opentelemetry-collector/templates/configmap.yaml
@@ -339,7 +345,10 @@ data:
         detectors:
         - gcp
         timeout: 10s
+<<<<<<< HEAD
 
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
       transform:
         error_mode: ignore
         trace_statements:
@@ -347,9 +356,12 @@ data:
           statements:
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+<<<<<<< HEAD
           - set(description, "") where name == "queueSize"
           - set(description, "") where name == "rpc.server.duration"
           - set(description, "") where name == "http.client.duration"
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
       transform/collision:
         metric_statements:
         - context: datapoint
@@ -399,7 +411,10 @@ data:
       redis:
         collection_interval: 10s
         endpoint: valkey-cart:6379
+<<<<<<< HEAD
         endpoint: redis-cart:6379
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
       zipkin:
         endpoint: ${env:MY_POD_IP}:9411
     service:
@@ -513,6 +528,7 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/name: opentelemetry-demo
     app.kubernetes.io/version: "1.11.1"
+<<<<<<< HEAD
     app.kubernetes.io/part-of: opentelemetry-demo
 data:
   
@@ -636,6 +652,8 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/name: opentelemetry-demo
     app.kubernetes.io/version: "1.11.1"
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 data:
   
@@ -665,19 +683,19 @@ data:
           "description": "Triggers full manual garbage collections in the ad service",
           "state": "ENABLED",
           "variants": {
-              "on": true,
-              "off": false
-            },
-            "defaultVariant": "off"
+            "on": true,
+            "off": false
+          },
+          "defaultVariant": "off"
         },
         "adServiceHighCpu": {
           "description": "Triggers high cpu load in the ad service",
           "state": "ENABLED",
           "variants": {
-              "on": true,
-              "off": false
-            },
-            "defaultVariant": "off"
+            "on": true,
+            "off": false
+          },
+          "defaultVariant": "off"
         },
         "adServiceFailure": {
           "description": "Fail ad service",
@@ -686,6 +704,7 @@ data:
             "on": true,
             "off": false
           },
+<<<<<<< HEAD
           "defaultVariant": "off",
           "targeting": {
             "fractional": [
@@ -851,15 +870,18 @@ data:
           ],
           "title": "Latency for ${service}",
           "type": "timeseries"
+=======
+          "defaultVariant": "off"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
         },
         "kafkaQueueProblems": {
           "description": "Overloads Kafka queue while simultaneously introducing a consumer side delay leading to a lag spike",
           "state": "ENABLED",
           "variants": {
-              "on": 100,
-              "off": 0
-            },
-            "defaultVariant": "off"
+            "on": 100,
+            "off": 0
+          },
+          "defaultVariant": "off"
         },
         "cartServiceFailure": {
           "description": "Fail cart service",
@@ -8356,10 +8378,14 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "0.105.0"
 =======
     app.kubernetes.io/version: "0.102.1"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "0.105.0"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     
 rules:
   - apiGroups: [""]
@@ -8452,10 +8478,14 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "0.105.0"
 =======
     app.kubernetes.io/version: "0.102.1"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "0.105.0"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -8701,10 +8731,14 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "0.105.0"
 =======
     app.kubernetes.io/version: "0.102.1"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "0.105.0"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     
     component: standalone-collector
 spec:
@@ -8790,10 +8824,14 @@ metadata:
     app.kubernetes.io/component: adservice
     app.kubernetes.io/name: opentelemetry-demo-adservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8817,10 +8855,14 @@ metadata:
     app.kubernetes.io/component: cartservice
     app.kubernetes.io/name: opentelemetry-demo-cartservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8844,10 +8886,14 @@ metadata:
     app.kubernetes.io/component: checkoutservice
     app.kubernetes.io/name: opentelemetry-demo-checkoutservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8871,10 +8917,14 @@ metadata:
     app.kubernetes.io/component: currencyservice
     app.kubernetes.io/name: opentelemetry-demo-currencyservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8898,10 +8948,14 @@ metadata:
     app.kubernetes.io/component: emailservice
     app.kubernetes.io/name: opentelemetry-demo-emailservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8925,10 +8979,14 @@ metadata:
     app.kubernetes.io/component: flagd
     app.kubernetes.io/name: opentelemetry-demo-flagd
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8952,10 +9010,14 @@ metadata:
     app.kubernetes.io/component: frontend
     app.kubernetes.io/name: opentelemetry-demo-frontend
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -8979,10 +9041,14 @@ metadata:
     app.kubernetes.io/component: frontendproxy
     app.kubernetes.io/name: opentelemetry-demo-frontendproxy
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
   annotations:
     networking.gke.io/internal-load-balancer-allow-global-access: "true"
@@ -9009,10 +9075,14 @@ metadata:
     app.kubernetes.io/component: imageprovider
     app.kubernetes.io/name: opentelemetry-demo-imageprovider
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9036,10 +9106,14 @@ metadata:
     app.kubernetes.io/component: kafka
     app.kubernetes.io/name: opentelemetry-demo-kafka
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9066,10 +9140,14 @@ metadata:
     app.kubernetes.io/component: loadgenerator
     app.kubernetes.io/name: opentelemetry-demo-loadgenerator
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9093,10 +9171,14 @@ metadata:
     app.kubernetes.io/component: paymentservice
     app.kubernetes.io/name: opentelemetry-demo-paymentservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9120,10 +9202,14 @@ metadata:
     app.kubernetes.io/component: productcatalogservice
     app.kubernetes.io/name: opentelemetry-demo-productcatalogservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9147,10 +9233,14 @@ metadata:
     app.kubernetes.io/component: quoteservice
     app.kubernetes.io/name: opentelemetry-demo-quoteservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9174,10 +9264,14 @@ metadata:
     app.kubernetes.io/component: recommendationservice
     app.kubernetes.io/name: opentelemetry-demo-recommendationservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9193,6 +9287,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
   name: opentelemetry-demo-redis
@@ -9219,6 +9314,8 @@ apiVersion: v1
 kind: Service
 metadata:
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
   name: opentelemetry-demo-shippingservice
   labels:
     
@@ -9227,10 +9324,14 @@ metadata:
     app.kubernetes.io/component: shippingservice
     app.kubernetes.io/name: opentelemetry-demo-shippingservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   type: ClusterIP
@@ -9243,6 +9344,9 @@ spec:
     opentelemetry.io/name: opentelemetry-demo-shippingservice
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
 # Source: opentelemetry-demo/templates/component.yaml
 apiVersion: v1
 kind: Service
@@ -9266,6 +9370,7 @@ spec:
     
     opentelemetry.io/name: opentelemetry-demo-valkey
 ---
+<<<<<<< HEAD
 # Source: opentelemetry-demo/charts/grafana/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -9500,6 +9605,8 @@ spec:
 ---
 =======
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
 # Source: opentelemetry-demo/charts/opentelemetry-collector/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -9510,10 +9617,14 @@ metadata:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "0.105.0"
 =======
     app.kubernetes.io/version: "0.102.1"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "0.105.0"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     
 spec:
   replicas: 1
@@ -9529,10 +9640,14 @@ spec:
     metadata:
       annotations:
 <<<<<<< HEAD
+<<<<<<< HEAD
         checksum/config: 18c43f1d8e381b9537a11dc3fac61916f789141ca14acfbf86f15fcad446868d
 =======
         checksum/config: 5272cb11e9bbb3b8e0f7a9f901e25ac84966fbd5ef4871370bdcecbab8940fcb
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+        checksum/config: e977a8909cee811890c9b923f25308405eb046f54a86b30b904fbcea0b8a5a4f
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
         opentelemetry_community_demo: "true"
         prometheus.io/port: "9464"
         prometheus.io/scrape: "true"
@@ -9553,10 +9668,14 @@ spec:
           securityContext:
             {}
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: "otel/opentelemetry-collector-contrib:0.105.0"
 =======
           image: "otel/opentelemetry-collector-contrib:0.102.1"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: "otel/opentelemetry-collector-contrib:0.105.0"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -9723,10 +9842,14 @@ metadata:
     app.kubernetes.io/component: accountingservice
     app.kubernetes.io/name: opentelemetry-demo-accountingservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -9747,10 +9870,14 @@ spec:
       containers:
         - name: accountingservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-accountingservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-accountingservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-accountingservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           env:
           - name: OTEL_SERVICE_NAME
@@ -9768,6 +9895,7 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
           resources:
             limits:
@@ -9778,6 +9906,12 @@ spec:
             limits:
               memory: 20Mi
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+          resources:
+            limits:
+              memory: 120Mi
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           volumeMounts:
       volumes:
       initContainers:
@@ -9801,10 +9935,14 @@ metadata:
     app.kubernetes.io/component: adservice
     app.kubernetes.io/name: opentelemetry-demo-adservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -9825,10 +9963,14 @@ spec:
       containers:
         - name: adservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-adservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-adservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-adservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -9856,10 +9998,14 @@ spec:
             value: otlp
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 300Mi
@@ -9878,10 +10024,14 @@ metadata:
     app.kubernetes.io/component: cartservice
     app.kubernetes.io/name: opentelemetry-demo-cartservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -9902,10 +10052,14 @@ spec:
       containers:
         - name: cartservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-cartservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-cartservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-cartservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -9926,12 +10080,17 @@ spec:
           - name: ASPNETCORE_URLS
             value: http://*:$(CART_SERVICE_PORT)
 <<<<<<< HEAD
+<<<<<<< HEAD
           - name: VALKEY_ADDR
             value: 'opentelemetry-demo-valkey:6379'
 =======
           - name: REDIS_ADDR
             value: 'opentelemetry-demo-redis:6379'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          - name: VALKEY_ADDR
+            value: 'opentelemetry-demo-valkey:6379'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           - name: FLAGD_HOST
             value: 'opentelemetry-demo-flagd'
           - name: FLAGD_PORT
@@ -9940,10 +10099,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 160Mi
@@ -9970,10 +10133,14 @@ metadata:
     app.kubernetes.io/component: checkoutservice
     app.kubernetes.io/name: opentelemetry-demo-checkoutservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -9994,10 +10161,14 @@ spec:
       containers:
         - name: checkoutservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-checkoutservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-checkoutservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-checkoutservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10037,10 +10208,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 20Mi
@@ -10067,10 +10242,14 @@ metadata:
     app.kubernetes.io/component: currencyservice
     app.kubernetes.io/name: opentelemetry-demo-currencyservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10091,10 +10270,14 @@ spec:
       containers:
         - name: currencyservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-currencyservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-currencyservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-currencyservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10116,6 +10299,7 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: VERSION
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: '1.11.1'
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
@@ -10124,6 +10308,11 @@ spec:
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: '1.11.1'
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 20Mi
@@ -10142,10 +10331,14 @@ metadata:
     app.kubernetes.io/component: emailservice
     app.kubernetes.io/name: opentelemetry-demo-emailservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10166,10 +10359,14 @@ spec:
       containers:
         - name: emailservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-emailservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-emailservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-emailservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10193,10 +10390,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4318/v1/traces
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 100Mi
@@ -10215,10 +10416,14 @@ metadata:
     app.kubernetes.io/component: flagd
     app.kubernetes.io/name: opentelemetry-demo-flagd
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10239,10 +10444,14 @@ spec:
       containers:
         - name: flagd
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-feature/flagd:v0.11.1'
 =======
           image: 'ghcr.io/open-feature/flagd:v0.10.1'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-feature/flagd:v0.11.1'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           command:
           - /flagd-build
@@ -10269,10 +10478,14 @@ spec:
             value: $(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 50Mi
@@ -10296,10 +10509,14 @@ metadata:
     app.kubernetes.io/component: frauddetectionservice
     app.kubernetes.io/name: opentelemetry-demo-frauddetectionservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10320,10 +10537,14 @@ spec:
       containers:
         - name: frauddetectionservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-frauddetectionservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           env:
           - name: OTEL_SERVICE_NAME
@@ -10345,10 +10566,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4318
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 300Mi
@@ -10375,10 +10600,14 @@ metadata:
     app.kubernetes.io/component: frontend
     app.kubernetes.io/name: opentelemetry-demo-frontend
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10399,10 +10628,14 @@ spec:
       containers:
         - name: frontend
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-frontend'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-frontend'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-frontend'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10450,10 +10683,14 @@ spec:
             value: http://localhost:8080/otlp-http/v1/traces
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 250Mi
@@ -10476,10 +10713,14 @@ metadata:
     app.kubernetes.io/component: frontendproxy
     app.kubernetes.io/name: opentelemetry-demo-frontendproxy
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10500,10 +10741,14 @@ spec:
       containers:
         - name: frontendproxy
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-frontendproxy'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-frontendproxy'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-frontendproxy'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10553,10 +10798,14 @@ spec:
             value: "4318"
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 50Mi
@@ -10579,10 +10828,14 @@ metadata:
     app.kubernetes.io/component: imageprovider
     app.kubernetes.io/name: opentelemetry-demo-imageprovider
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10603,10 +10856,14 @@ spec:
       containers:
         - name: imageprovider
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-imageprovider'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-imageprovider'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-imageprovider'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10630,10 +10887,14 @@ spec:
             value: $(OTEL_COLLECTOR_NAME)
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 50Mi
@@ -10652,10 +10913,14 @@ metadata:
     app.kubernetes.io/component: kafka
     app.kubernetes.io/name: opentelemetry-demo-kafka
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10676,10 +10941,14 @@ spec:
       containers:
         - name: kafka
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-kafka'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-kafka'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-kafka'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10705,10 +10974,14 @@ spec:
             value: -Xmx400M -Xms400M
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 600Mi
@@ -10731,10 +11004,14 @@ metadata:
     app.kubernetes.io/component: loadgenerator
     app.kubernetes.io/name: opentelemetry-demo-loadgenerator
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10755,10 +11032,14 @@ spec:
       containers:
         - name: loadgenerator
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-loadgenerator'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-loadgenerator'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-loadgenerator'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10798,10 +11079,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 1Gi
@@ -10820,10 +11105,14 @@ metadata:
     app.kubernetes.io/component: paymentservice
     app.kubernetes.io/name: opentelemetry-demo-paymentservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10844,10 +11133,14 @@ spec:
       containers:
         - name: paymentservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-paymentservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-paymentservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-paymentservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10873,10 +11166,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 120Mi
@@ -10899,10 +11196,14 @@ metadata:
     app.kubernetes.io/component: productcatalogservice
     app.kubernetes.io/name: opentelemetry-demo-productcatalogservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10923,10 +11224,14 @@ spec:
       containers:
         - name: productcatalogservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-productcatalogservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -10952,10 +11257,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 20Mi
@@ -10974,10 +11283,14 @@ metadata:
     app.kubernetes.io/component: quoteservice
     app.kubernetes.io/name: opentelemetry-demo-quoteservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -10998,10 +11311,14 @@ spec:
       containers:
         - name: quoteservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-quoteservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-quoteservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-quoteservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -11025,10 +11342,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4318
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 40Mi
@@ -11051,10 +11372,14 @@ metadata:
     app.kubernetes.io/component: recommendationservice
     app.kubernetes.io/name: opentelemetry-demo-recommendationservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -11075,10 +11400,14 @@ spec:
       containers:
         - name: recommendationservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-recommendationservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-recommendationservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-recommendationservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -11110,10 +11439,14 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 500Mi
@@ -11126,6 +11459,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+<<<<<<< HEAD
   name: opentelemetry-demo-redis
   labels:
     
@@ -11186,6 +11520,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
   name: opentelemetry-demo-shippingservice
   labels:
     
@@ -11194,10 +11530,14 @@ metadata:
     app.kubernetes.io/component: shippingservice
     app.kubernetes.io/name: opentelemetry-demo-shippingservice
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.kubernetes.io/version: "1.11.1"
 =======
     app.kubernetes.io/version: "1.10.0"
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+    app.kubernetes.io/version: "1.11.1"
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
@@ -11218,10 +11558,14 @@ spec:
       containers:
         - name: shippingservice
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: 'ghcr.io/open-telemetry/demo:1.11.1-shippingservice'
 =======
           image: 'ghcr.io/open-telemetry/demo:1.10.0-shippingservice'
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+          image: 'ghcr.io/open-telemetry/demo:1.11.1-shippingservice'
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -11245,16 +11589,23 @@ spec:
             value: http://$(OTEL_COLLECTOR_NAME):4317
           - name: OTEL_RESOURCE_ATTRIBUTES
 <<<<<<< HEAD
+<<<<<<< HEAD
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
 =======
             value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0
 >>>>>>> b9de1fe (Use helmfile to regenerate the k8s YAML)
+=======
+            value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.11.1
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
           resources:
             limits:
               memory: 20Mi
           volumeMounts:
       volumes:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
 ---
 # Source: opentelemetry-demo/templates/component.yaml
 apiVersion: apps/v1
@@ -11314,6 +11665,7 @@ spec:
             runAsUser: 999
           volumeMounts:
       volumes:
+<<<<<<< HEAD
 ---
 # Source: opentelemetry-demo/charts/opensearch/templates/statefulset.yaml
 apiVersion: apps/v1
@@ -11402,6 +11754,8 @@ spec:
             - ALL
           runAsNonRoot: true
           runAsUser: 1000
+=======
+>>>>>>> 78150bc (Bump helm chart to 0.32 and collector to 0.105.0 (#147))
 
         image: "opensearchproject/opensearch:2.15.0"
         imagePullPolicy: "IfNotPresent"

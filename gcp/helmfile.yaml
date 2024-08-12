@@ -33,7 +33,7 @@ releases:
   - name: opentelemetry-demo
     namespace: "{{ .Values.namespace }}"
     chart: open-telemetry/opentelemetry-demo
-    version: ~0.31
+    version: ~0.32
     values:
       - opentelemetry-demo-values.yaml
       - opentelemetry-demo-features.yaml.gotmpl
