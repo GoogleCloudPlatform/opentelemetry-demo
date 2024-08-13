@@ -1,7 +1,7 @@
 # Copyright The OpenTelemetry Authors
 # SPDX-License-Identifier: Apache-2.0
 
-FROM postgres:16.1-alpine
+FROM postgres:16.4-alpine
 
 COPY ./src/ffspostgres/init-scripts/ /docker-entrypoint-initdb.d/
 
