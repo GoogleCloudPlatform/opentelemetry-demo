@@ -30,7 +30,6 @@ sign a new one.
 
 ### Review our community guidelines
 
->>>>>>> 9b74f5a (add google-specific contributing guidelines)
 This project follows
 [Google's Open Source Community Guidelines](https://opensource.google/conduct/).
 
