@@ -3,7 +3,6 @@
 using System;
 
 using cartservice.cartstore;
-using cartservice.featureflags;
 using cartservice.services;
 
 using Microsoft.AspNetCore.Builder;
@@ -14,15 +13,17 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Instrumentation.StackExchangeRedis;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.ResourceDetectors.Container;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using OpenFeature;
+using OpenFeature.Contrib.Providers.Flagd;
+using OpenFeature.Contrib.Hooks.Otel;
 
 var builder = WebApplication.CreateBuilder(args);
-string redisAddress = builder.Configuration["REDIS_ADDR"];
-if (string.IsNullOrEmpty(redisAddress))
+string valkeyAddress = builder.Configuration["VALKEY_ADDR"];
+if (string.IsNullOrEmpty(valkeyAddress))
 {
-    Console.WriteLine("REDIS_ADDR environment variable is required.");
+    Console.WriteLine("VALKEY_ADDR environment variable is required.");
     Environment.Exit(1);
 }
 
@@ -32,22 +33,30 @@ builder.Logging
 
 builder.Services.AddSingleton<ICartStore>(x=>
 {
-    var store = new RedisCartStore(x.GetRequiredService<ILogger<RedisCartStore>>(), redisAddress);
+    var store = new ValkeyCartStore(x.GetRequiredService<ILogger<ValkeyCartStore>>(), valkeyAddress);
     store.Initialize();
     return store;
 });
 
-builder.Services.AddSingleton<FeatureFlagHelper>();
-builder.Services.AddSingleton(x => new CartService(x.GetRequiredService<ICartStore>(),
-    new RedisCartStore(x.GetRequiredService<ILogger<RedisCartStore>>(), "badhost:1234"),
-    x.GetRequiredService<FeatureFlagHelper>()));
+builder.Services.AddSingleton<IFeatureClient>(x => {
+    var flagdProvider = new FlagdProvider();
+    Api.Instance.SetProviderAsync(flagdProvider).GetAwaiter().GetResult();
+    var client = Api.Instance.GetClient();
+    return client;
+});
 
+builder.Services.AddSingleton(x =>
+    new CartService(
+        x.GetRequiredService<ICartStore>(),
+        new ValkeyCartStore(x.GetRequiredService<ILogger<ValkeyCartStore>>(), "badhost:1234"),
+        x.GetRequiredService<IFeatureClient>()
+));
 
-// see https://opentelemetry.io/docs/instrumentation/net/getting-started/
 
 Action<ResourceBuilder> appResourceBuilder =
     resource => resource
-        .AddDetector(new ContainerResourceDetector());
+        .AddContainerDetector()
+        .AddHostDetector();
 
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(appResourceBuilder)
@@ -63,15 +72,15 @@ builder.Services.AddOpenTelemetry()
         .AddRuntimeInstrumentation()
         .AddAspNetCoreInstrumentation()
         .AddOtlpExporter());
-
+OpenFeature.Api.Instance.AddHooks(new TracingHook());
 builder.Services.AddGrpc();
 builder.Services.AddGrpcHealthChecks()
     .AddCheck("Sample", () => HealthCheckResult.Healthy());
 
 var app = builder.Build();
 
-var redisCartStore = (RedisCartStore) app.Services.GetRequiredService<ICartStore>();
-app.Services.GetRequiredService<StackExchangeRedisInstrumentation>().AddConnection(redisCartStore.GetConnection());
+var ValkeyCartStore = (ValkeyCartStore) app.Services.GetRequiredService<ICartStore>();
+app.Services.GetRequiredService<StackExchangeRedisInstrumentation>().AddConnection(ValkeyCartStore.GetConnection());
 
 app.MapGrpcService<CartService>();
 app.MapGrpcHealthChecksService();

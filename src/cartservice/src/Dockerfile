@@ -15,13 +15,13 @@
 # limitations under the License.
 
 # https://mcr.microsoft.com/v2/dotnet/sdk/tags/list
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0.200 AS builder
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0.302 AS builder
 ARG TARGETARCH
 
 WORKDIR /usr/src/app/
 
 COPY ./src/cartservice/ ./
-COPY ./pb/ ./src/protos/
+COPY ./pb/ ./pb/
 
 RUN dotnet restore ./src/cartservice.csproj -v d -r linux-musl-$TARGETARCH
 
@@ -30,7 +30,7 @@ RUN dotnet publish ./src/cartservice.csproj -v d -r linux-musl-$TARGETARCH --no-
 # -----------------------------------------------------------------------------
 
 # https://mcr.microsoft.com/v2/dotnet/runtime-deps/tags/list
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.2-alpine3.18
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.6-alpine3.20
 
 WORKDIR /usr/src/app/
 COPY --from=builder /cartservice/ ./
