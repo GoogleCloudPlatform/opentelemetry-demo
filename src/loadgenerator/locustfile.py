@@ -8,13 +8,15 @@ import json
 import os
 import random
 import uuid
+import logging
+
 from locust import HttpUser, task, between
 from locust_plugins.users.playwright import PlaywrightUser, pw, PageWithRetry, event
 
 from opentelemetry import context, baggage, trace
 from opentelemetry.metrics import set_meter_provider
 from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import MetricExporter, PeriodicExportingMetricReader
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
@@ -23,7 +25,34 @@ from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
 from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
+    OTLPLogExporter,
+)
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.sdk.resources import Resource
+
+from openfeature import api
+from openfeature.contrib.provider.flagd import FlagdProvider
+from openfeature.contrib.hook.opentelemetry import TracingHook
+
 from playwright.async_api import Route, Request
+
+logger_provider = LoggerProvider(resource=Resource.create(
+        {
+            "service.name": "loadgenerator",
+        }
+    ),)
+set_logger_provider(logger_provider)
+
+exporter = OTLPLogExporter(insecure=True)
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(exporter))
+handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
+
+# Attach OTLP handler to locust logger
+logging.getLogger().addHandler(handler)
+logging.getLogger().setLevel(logging.INFO)
 
 exporter = OTLPMetricExporter(insecure=True)
 set_meter_provider(MeterProvider([PeriodicExportingMetricReader(exporter)]))
@@ -37,6 +66,16 @@ Jinja2Instrumentor().instrument()
 RequestsInstrumentor().instrument()
 SystemMetricsInstrumentor().instrument()
 URLLib3Instrumentor().instrument()
+logging.info("Instrumentation complete")
+
+# Initialize Flagd provider
+api.set_provider(FlagdProvider(host=os.environ.get('FLAGD_HOST', 'flagd'), port=os.environ.get('FLAGD_PORT', 8013)))
+api.add_hooks([TracingHook()])
+
+def get_flagd_value(FlagName):
+    # Initialize OpenFeature
+    client = api.get_client()
+    return client.get_integer_value(FlagName, 0)
 
 categories = [
     "binoculars",
@@ -63,7 +102,6 @@ products = [
 
 people_file = open('people.json')
 people = json.load(people_file)
-
 
 class WebsiteUser(HttpUser):
     wait_time = between(1, 10)
@@ -128,8 +166,14 @@ class WebsiteUser(HttpUser):
         checkout_person["userId"] = user
         self.client.post("/api/checkout", json=checkout_person)
 
+    @task(5)
+    def flood_home(self):
+        for _ in range(0, get_flagd_value("loadgeneratorFloodHomepage")):
+            self.client.get("/")
+
     def on_start(self):
-        ctx = baggage.set_baggage("synthetic_request", "true")
+        ctx = baggage.set_baggage("session.id", str(uuid.uuid4()))
+        ctx = baggage.set_baggage("synthetic_request", "true", context=ctx)
         context.attach(ctx)
         self.index()
 
@@ -167,8 +211,9 @@ if browser_traffic_enabled:
 
 
 async def add_baggage_header(route: Route, request: Request):
+    existing_baggage = request.headers.get('baggage', '')
     headers = {
         **request.headers,
-        'baggage': 'synthetic_request=true'
+        'baggage': ', '.join(filter(None, (existing_baggage, 'synthetic_request=true')))
     }
     await route.continue_(headers=headers)
