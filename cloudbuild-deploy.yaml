@@ -14,23 +14,15 @@
 
 steps:
 - name: ghcr.io/helmfile/helmfile
-  id: Generate
-  script: |
-    #!/usr/bin/env bash
-    apk add make
-    make generate-kubernetes-manifests HELMFILE_FLAGS="--environment production --state-values-set-string auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=https://us-central1-telemetry.googleapis.com:443"
-  env:
-  - 'PROJECT_ID=$PROJECT_ID'
-
-# deploy the manifests to the otel-demo namespace in GKE
-- name: 'gcr.io/cloud-builders/kubectl'
   id: Deploy
   args:
-  - 'apply'
-  - '-n'
-  - 'otel-demo'
-  - '-f'
-  - './kubernetes/.'
+    - 'apply'
+    - '-f'
+    - 'gcp/helmfile.yaml'
+    - '--state-values-set-string'
+    - 'workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$OTLP_ENDPOINT'
   env:
+  - 'PROJECT_ID=$PROJECT_ID'
   - 'CLOUDSDK_COMPUTE_REGION=${LOCATION}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+  - 'OTLP_ENDPOINT=${_OTLP_ENDPOINT}'
