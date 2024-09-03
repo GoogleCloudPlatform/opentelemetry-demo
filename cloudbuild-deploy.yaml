@@ -13,16 +13,39 @@
 # limitations under the License.
 
 steps:
+- name: 'gcr.io/cloud-builders/kubectl'
+  id: Authenticate
+  args:
+  - config
+  - current-context
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=${LOCATION}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+
+# GKE Auth plugin is not available to the helmfile image.
+# Install it and copy to $HOME where it will be available in the next step.
+- name: 'ubuntu'
+  id: Install gke auth plugin
+  script: |
+    #!/usr/bin/env bash
+    apt-get update && apt-get install -y curl apt-transport-https ca-certificates gnupg
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    apt-get update && apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+    cp /usr/bin/gke-gcloud-auth-plugin .
+
+# Update $PATH to include $HOME so we can use the GKE auth plugin.
+# (kubectl plugins just search $PATH)
 - name: ghcr.io/helmfile/helmfile
   id: Deploy
-  args:
-    - 'apply'
-    - '-f'
-    - 'gcp/helmfile.yaml'
-    - '--state-values-set-string'
-    - 'workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$OTLP_ENDPOINT'
+  script: |
+    #!/usr/bin/env bash
+    export PATH=$PATH:$(pwd)
+    helmfile apply -f gcp/helmfile.yaml --environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$_OTLP_ENDPOINT
+  automapSubstitutions: true
   env:
   - 'PROJECT_ID=$PROJECT_ID'
   - 'CLOUDSDK_COMPUTE_REGION=${LOCATION}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
-  - 'OTLP_ENDPOINT=${_OTLP_ENDPOINT}'
+substitutions:
+  _OTLP_ENDPOINT: ${_OTLP_ENDPOINT}
