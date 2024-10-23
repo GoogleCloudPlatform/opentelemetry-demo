@@ -61,5 +61,5 @@ opentelemetry-collector:
       pipelines:
         traces:
           processors: [k8sattributes, memory_limiter, resourcedetection, resource, resource/gcp_project_id, batch]
-          exporters: [googlecloud, otlphttp/gcp_auth]
+          exporters: [otlphttp/gcp_auth]
 {{ end }}
