@@ -38,10 +38,12 @@ steps:
 # (kubectl plugins just search $PATH)
 - name: ghcr.io/helmfile/helmfile
   id: Deploy
+  # yamllint disable rule:line-length
   script: |
     #!/usr/bin/env bash
     export PATH=$PATH:$(pwd)
     helmfile apply -f gcp/helmfile.yaml --environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$_OTLP_ENDPOINT
+  # yamllint enable rule:line-length
   automapSubstitutions: true
   env:
   - 'PROJECT_ID=$PROJECT_ID'
