@@ -62,4 +62,7 @@ opentelemetry-collector:
         traces:
           processors: [k8sattributes, memory_limiter, resourcedetection, resource, resource/gcp_project_id, batch]
           exporters: [otlphttp/gcp_auth]
+        metrics/otlp:
+          processors: [k8sattributes, memory_limiter, filter/currency, resourcedetection, transform/collision, resource, resource/gcp_project_id, transform/metricprefix, batch]
+          exporters: [otlphttp/gcp_auth]
 {{ end }}
