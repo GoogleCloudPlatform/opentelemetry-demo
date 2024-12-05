@@ -16,7 +16,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
 ---
 # Source: opentelemetry-demo/templates/serviceaccount.yaml
 apiVersion: v1
@@ -40,7 +40,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
     
 data:
   relay: |
@@ -77,6 +77,8 @@ data:
           - k8s.pod.name
           - k8s.pod.uid
           - k8s.pod.start_time
+        filter:
+          namespace: otel-demo
         passthrough: false
         pod_association:
         - sources:
@@ -333,7 +335,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
     
 rules:
   - apiGroups: [""]
@@ -354,7 +356,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
     
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -374,7 +376,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
     
     component: standalone-collector
 spec:
@@ -826,7 +828,7 @@ metadata:
   labels:
     app.kubernetes.io/name: otelcol
     app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.105.0"
+    app.kubernetes.io/version: "0.108.0"
     
 spec:
   replicas: 1
@@ -841,7 +843,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: e977a8909cee811890c9b923f25308405eb046f54a86b30b904fbcea0b8a5a4f
+        checksum/config: e97c80b05446f6f5618296306bb6dbc2f24010ca9bda1c6e2716d17d27c94c44
         opentelemetry_community_demo: "true"
         prometheus.io/port: "9464"
         prometheus.io/scrape: "true"
@@ -861,7 +863,7 @@ spec:
             - --config=/conf/relay.yaml
           securityContext:
             {}
-          image: "otel/opentelemetry-collector-contrib:0.105.0"
+          image: "otel/opentelemetry-collector-contrib:0.108.0"
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -935,6 +937,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -998,6 +1001,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1063,6 +1067,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1138,6 +1143,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1223,6 +1229,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1284,6 +1291,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1345,6 +1353,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1414,6 +1423,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1481,6 +1491,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1570,6 +1581,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1661,6 +1673,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1722,6 +1735,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1789,6 +1803,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1866,6 +1881,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1933,6 +1949,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -1996,6 +2013,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -2061,6 +2079,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -2130,6 +2149,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
@@ -2191,6 +2211,7 @@ metadata:
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       
