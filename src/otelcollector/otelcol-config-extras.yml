@@ -35,6 +35,12 @@ processors:
     detectors: [gcp]
     timeout: 10s
 
+  transform/metricprefix:
+    metric_statements:
+    - context: metric
+      statements:
+      - set(name, Concat(["otlp", name], "."))
+
   transform/collision:
     metric_statements:
     - context: datapoint
