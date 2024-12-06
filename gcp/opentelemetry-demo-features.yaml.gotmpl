@@ -36,6 +36,11 @@ opentelemetry-collector:
           authenticator: googleclientauth
 
     processors:
+      transform/metricprefix:
+        metric_statements:
+        - context: metric
+          statements:
+          - set(name, Concat(["otlp", name], "."))
       resource/gcp_project_id:
         attributes:
         - action: insert
