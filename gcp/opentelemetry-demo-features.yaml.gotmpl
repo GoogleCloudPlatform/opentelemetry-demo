@@ -51,9 +51,6 @@ opentelemetry-collector:
 
     extensions:
       googleclientauth:
-        scopes:
-        - "https://www.googleapis.com/auth/trace.append"
-        - "https://www.googleapis.com/auth/cloud-platform"
 {{ with .Values | getOrNil "auth_extension_project_id" }}
         project: "{{ . }}"
 {{ end }}
