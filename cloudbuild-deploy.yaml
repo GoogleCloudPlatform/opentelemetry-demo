@@ -42,7 +42,7 @@ steps:
   script: |
     #!/usr/bin/env bash
     export PATH=$PATH:$(pwd)
-    helmfile apply -f gcp/helmfile.yaml --environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$_OTLP_ENDPOINT
+    helmfile apply -f gcp/helmfile.yaml --environment production --state-values-set-string workload_identity_project_id=$PROJECT_ID,auth_extension_project_id=$PROJECT_ID,auth_extension_quota_project_id=$PROJECT_ID,otlp_endpoint=$_OTLP_ENDPOINT,otlp_staging_endpoint=$_OTLP_STAGING_ENDPOINT
   # yamllint enable rule:line-length
   automapSubstitutions: true
   env:
@@ -51,3 +51,4 @@ steps:
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
 substitutions:
   _OTLP_ENDPOINT: ${_OTLP_ENDPOINT}
+  _OTLP_STAGING_ENDPOINT: ${_OTLP_STAGING_ENDPOINT}
