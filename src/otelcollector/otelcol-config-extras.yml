@@ -53,10 +53,11 @@ processors:
       - delete_key(attributes, "project_id")
 
   # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
-  filter/currency:
+  # flagd metrics are written too often.
+  filter/too_frequent:
     metrics:
       metric:
-      - 'IsMatch(name, "(.*)app_currency(.*)")'
+      - '(IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"] == "flagd")'
 
 exporters:
   googlecloud:
@@ -75,5 +76,5 @@ service:
       exporters: [googlecloud] #spanmetrics disabled
     metrics:
       receivers: [otlp] #spanmetrics disabled
-      processors: [filter/currency, memory_limiter, resourcedetection, transform/collision, batch]
+      processors: [filter/too_frequent, memory_limiter, resourcedetection, transform/collision, batch]
       exporters: [googlemanagedprometheus]

@@ -60,10 +60,10 @@ data:
         send_batch_max_size: 200
         send_batch_size: 200
         timeout: 5s
-      filter/currency:
+      filter/too_frequent:
         metrics:
           metric:
-          - IsMatch(name, "(.*)app_currency(.*)")
+          - (IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"] == "flagd")
       k8sattributes:
         extract:
           metadata:
@@ -181,7 +181,7 @@ data:
           processors:
           - k8sattributes
           - memory_limiter
-          - filter/currency
+          - filter/too_frequent
           - resourcedetection
           - transform/collision
           - resource
