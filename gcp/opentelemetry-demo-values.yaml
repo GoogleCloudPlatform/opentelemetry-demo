@@ -93,6 +93,9 @@ opentelemetry-collector:
       otlphttp/prometheus: null
 
     service:
+      telemetry:
+        metrics:
+          address: ${env:MY_POD_IP}:8888
       pipelines:
         logs:
           processors: [resourcedetection, resource, memory_limiter, batch]
@@ -101,6 +104,6 @@ opentelemetry-collector:
           processors: [memory_limiter, resourcedetection, resource, batch]
           exporters: [googlecloud]  # spanmetrics disabled
         metrics:
-          receivers: [otlp]  # spanmetrics disabled
+          receivers: [otlp, prometheus]  # spanmetrics disabled
           processors: [memory_limiter, filter/too_frequent, resourcedetection, transform/collision, resource, batch]
           exporters: [googlemanagedprometheus]
