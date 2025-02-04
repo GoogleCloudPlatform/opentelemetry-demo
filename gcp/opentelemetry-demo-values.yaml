@@ -76,12 +76,9 @@ opentelemetry-collector:
           - set(attributes["exported_project_id"], attributes["project_id"])
           - delete_key(attributes, "project_id")
 
-      # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
-      # flagd metrics are written too often.
-      filter/too_frequent:
-        metrics:
-          metric:
-          - '(IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"] == "flagd")'
+      interval:
+        # Don't allow anything more often than 30 seconds.
+        interval: 30s
 
     exporters:
       googlecloud:
@@ -108,5 +105,5 @@ opentelemetry-collector:
           exporters: [googlecloud]  # spanmetrics disabled
         metrics:
           receivers: [otlp, prometheus]  # spanmetrics disabled
-          processors: [memory_limiter, filter/too_frequent, resourcedetection, transform/collision, resource, batch]
+          processors: [memory_limiter, interval, resourcedetection, transform/collision, resource, batch]
           exporters: [googlemanagedprometheus]
