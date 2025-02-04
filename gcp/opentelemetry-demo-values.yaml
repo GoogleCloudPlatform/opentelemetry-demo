@@ -94,6 +94,8 @@ opentelemetry-collector:
 
     service:
       telemetry:
+        logs:
+          encoding: json
         metrics:
           address: ${env:MY_POD_IP}:8888
       pipelines:
