@@ -40,6 +40,9 @@ opentelemetry-collector:
     create: true
     name: "opentelemetry-demo-otelcol"
 
+  image:
+    tag: 0.118.0
+
   config:
     processors:
       memory_limiter:
