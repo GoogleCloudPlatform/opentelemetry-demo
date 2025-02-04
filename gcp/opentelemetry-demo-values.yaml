@@ -94,6 +94,8 @@ opentelemetry-collector:
 
     service:
       telemetry:
+        logs:
+          encoding: json
         metrics:
           readers:
           - periodic:
