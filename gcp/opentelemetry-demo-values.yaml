@@ -97,7 +97,12 @@ opentelemetry-collector:
         logs:
           encoding: json
         metrics:
-          address: ${env:MY_POD_IP}:8888
+          readers:
+          - periodic:
+              exporter:
+                otlp:
+                  protocol: grpc/protobuf
+                  endpoint: ${env:MY_POD_IP}:4317
       pipelines:
         logs:
           processors: [resourcedetection, resource, memory_limiter, batch]
@@ -106,6 +111,6 @@ opentelemetry-collector:
           processors: [memory_limiter, resourcedetection, resource, batch]
           exporters: [googlecloud]  # spanmetrics disabled
         metrics:
-          receivers: [otlp, prometheus]  # spanmetrics disabled
+          receivers: [otlp]  # spanmetrics disabled
           processors: [memory_limiter, interval, resourcedetection, transform/collision, resource, batch]
           exporters: [googlemanagedprometheus]
