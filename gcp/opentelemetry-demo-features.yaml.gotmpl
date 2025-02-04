@@ -27,13 +27,6 @@ opentelemetry-collector:
 {{ if hasKey .Values "otlp_endpoint" }}
   config:
     exporters:
-      otlphttp/gcp_auth_staging:
-        encoding: json
-{{ with .Values | getOrNil "otlp_staging_endpoint" }}
-        endpoint: "{{ . }}"
-{{ end }}
-        auth:
-          authenticator: googleclientauth
       otlphttp/gcp_auth:
         encoding: json
 {{ with .Values | getOrNil "otlp_endpoint" }}
@@ -66,8 +59,8 @@ opentelemetry-collector:
         traces:
           processors: [k8sattributes, memory_limiter, resourcedetection, resource, resource/gcp_project_id, batch]
           exporters: [googlecloud, otlphttp/gcp_auth]
-        metrics/otlp:
+        metrics:
           receivers: [otlp]
           processors: [k8sattributes, memory_limiter, filter/too_frequent, resourcedetection, transform/collision, resource, resource/gcp_project_id, batch]
-          exporters: [otlphttp/gcp_auth_staging]
+          exporters: [otlphttp/gcp_auth]
 {{ end }}
