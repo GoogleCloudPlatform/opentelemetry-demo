@@ -155,9 +155,6 @@ data:
             static_configs:
             - targets:
               - ${env:MY_POD_IP}:8888
-      redis:
-        collection_interval: 10s
-        endpoint: valkey-cart:6379
       zipkin:
         endpoint: ${env:MY_POD_IP}:9411
     service:
