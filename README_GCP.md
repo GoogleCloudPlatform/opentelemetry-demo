@@ -13,7 +13,7 @@ running on a GKE Autopilot cluster (or any cluster with Workload Identity), you
 must follow the prerequisite steps to set up a Workload Identity-enabled service
 account below. Otherwise, you can skip to the next section.
 
-### Workload Identity prequisites
+### Workload Identity Prerequisites
 
 Grant permission using [Workload
 Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to)
