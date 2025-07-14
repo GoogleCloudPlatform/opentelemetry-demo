@@ -26,16 +26,16 @@ export PROJECT_NUMBER=$(gcloud projects describe ${GCLOUD_PROJECT} --format='get
 
 ```console
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/logging.logWriter"
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/monitoring.metricWriter"
 gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role "roles/cloudtrace.agent"
 gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${PROJECT_ID}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
+    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
     --role roles/iam.workloadIdentityUser \
 ```
 
