@@ -36,7 +36,7 @@ steps:
 
 # Update $PATH to include $HOME so we can use the GKE auth plugin.
 # (kubectl plugins just search $PATH)
-- name: ghcr.io/helmfile/helmfile:v1.0.0-rc.11
+- name: ghcr.io/helmfile/helmfile:v1.1.7
   id: Deploy
   # yamllint disable rule:line-length
   script: |
