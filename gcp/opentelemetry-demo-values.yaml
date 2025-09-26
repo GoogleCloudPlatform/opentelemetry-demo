@@ -27,7 +27,7 @@ jaeger:
   enabled: false
 
 components:
-  frontendProxy:
+  frontend-proxy:
     service:
       type: LoadBalancer
       annotations:
