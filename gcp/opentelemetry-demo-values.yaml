@@ -101,7 +101,7 @@ opentelemetry-collector:
           - periodic:
               exporter:
                 otlp:
-                  protocol: grpc/protobuf
+                  protocol: grpc
                   endpoint: ${env:MY_POD_IP}:4317
       pipelines:
         logs:

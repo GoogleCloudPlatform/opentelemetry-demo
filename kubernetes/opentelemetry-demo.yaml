@@ -209,7 +209,7 @@ data:
               exporter:
                 otlp:
                   endpoint: ${env:MY_POD_IP}:4317
-                  protocol: grpc/protobuf
+                  protocol: grpc
 ---
 # Source: opentelemetry-demo/templates/flagd-config.yaml
 apiVersion: v1
@@ -1019,7 +1019,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: f3cf0587b803d273ffaeb0fa1ec88e8c8672a73cf93eb1940363fb29bb84344b
+        checksum/config: 1af4133983f76ceaf8e7f3b89c8dddfea01a1fc5adf4e89a301c17381e6d7c23
         opentelemetry_community_demo: "true"
         prometheus.io/scrape: "true"
       labels:
