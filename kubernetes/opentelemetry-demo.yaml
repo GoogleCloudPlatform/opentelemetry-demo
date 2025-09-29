@@ -100,13 +100,6 @@ data:
         detectors:
         - gcp
         timeout: 10s
-      transform:
-        error_mode: ignore
-        trace_statements:
-        - context: span
-          statements:
-          - replace_pattern(name, "\\?.*", "")
-          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
       transform/collision:
         metric_statements:
         - context: datapoint
@@ -124,17 +117,6 @@ data:
           - set(attributes["exported_project_id"], attributes["project_id"])
           - delete_key(attributes, "project_id")
     receivers:
-      httpcheck/frontend-proxy:
-        targets:
-        - endpoint: http://frontend-proxy:8080
-      jaeger:
-        protocols:
-          grpc:
-            endpoint: ${env:MY_POD_IP}:14250
-          thrift_compact:
-            endpoint: ${env:MY_POD_IP}:6831
-          thrift_http:
-            endpoint: ${env:MY_POD_IP}:14268
       otlp:
         protocols:
           grpc:
@@ -145,19 +127,6 @@ data:
               - http://*
               - https://*
             endpoint: ${env:MY_POD_IP}:4318
-      prometheus:
-        config:
-          scrape_configs:
-          - job_name: opentelemetry-collector
-            scrape_interval: 10s
-            static_configs:
-            - targets:
-              - ${env:MY_POD_IP}:8888
-      redis:
-        collection_interval: 10s
-        endpoint: valkey-cart:6379
-      zipkin:
-        endpoint: ${env:MY_POD_IP}:9411
     service:
       extensions:
       - health_check
@@ -197,8 +166,6 @@ data:
           - batch
           receivers:
           - otlp
-          - jaeger
-          - zipkin
       telemetry:
         logs:
           encoding: json
@@ -1019,7 +986,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 1af4133983f76ceaf8e7f3b89c8dddfea01a1fc5adf4e89a301c17381e6d7c23
+        checksum/config: f3eb8c6ad4aa838e011ce057f9e4103b7ccb5e4154cc2e586b87a87f614f57ad
         opentelemetry_community_demo: "true"
         prometheus.io/scrape: "true"
       labels:
