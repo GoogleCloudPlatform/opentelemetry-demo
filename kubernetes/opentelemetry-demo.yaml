@@ -43,10 +43,7 @@ metadata:
     app.kubernetes.io/component: standalone-collector
 data:
   relay: |
-    connectors:
-      spanmetrics: {}
     exporters:
-      debug: {}
       googlecloud:
         log:
           default_log_name: opentelemetry.io/opentelemetry-demo
@@ -986,7 +983,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: f3eb8c6ad4aa838e011ce057f9e4103b7ccb5e4154cc2e586b87a87f614f57ad
+        checksum/config: 102210b7a57a26f04e80f534a9a17aa6bbca100d10382f92a831159ddbb6b23b
         opentelemetry_community_demo: "true"
         prometheus.io/scrape: "true"
       labels:
@@ -1004,6 +1001,7 @@ spec:
         - name: opentelemetry-collector
           args:
             - --config=/conf/relay.yaml
+            - --feature-gates=exporter.googlemanagedprometheus.intToDouble
           securityContext:
             {}
           image: "otel/opentelemetry-collector-contrib:0.131.0"
