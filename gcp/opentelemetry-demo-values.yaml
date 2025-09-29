@@ -40,7 +40,7 @@ opentelemetry-collector:
     create: true
     name: "opentelemetry-demo-otelcol"
 
-  config:
+  alternateConfig:
     processors:
       memory_limiter:
         check_interval: 1s
@@ -80,6 +80,12 @@ opentelemetry-collector:
           metric:
           - '(IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"] == "flagd")'
 
+      resource:
+        attributes:
+        - action: insert
+          from_attribute: k8s.pod.uid
+          key: service.instance.id
+
     exporters:
       googlecloud:
         log:
@@ -87,16 +93,29 @@ opentelemetry-collector:
 
       googlemanagedprometheus: {}
 
-      # Disable unused exporters
-      opensearch: null
-      otlp: null
-      otlphttp/prometheus: null
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: ${env:MY_POD_IP}:4317
+          http:
+            cors:
+              allowed_origins:
+              - http://*
+              - https://*
+            endpoint: ${env:MY_POD_IP}:4318
 
     service:
+      extensions: [health_check]
       telemetry:
         logs:
           encoding: json
         metrics:
+          level: detailed
           readers:
           - periodic:
               exporter:
@@ -105,9 +124,11 @@ opentelemetry-collector:
                   endpoint: ${env:MY_POD_IP}:4317
       pipelines:
         logs:
+          receivers: [otlp]
           processors: [resourcedetection, resource, memory_limiter, batch]
           exporters: [googlecloud]
         traces:
+          receivers: [otlp]
           processors: [memory_limiter, resourcedetection, resource, batch]
           exporters: [googlecloud]  # spanmetrics disabled
         metrics:
