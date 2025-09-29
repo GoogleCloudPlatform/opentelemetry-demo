@@ -40,6 +40,9 @@ opentelemetry-collector:
     create: true
     name: "opentelemetry-demo-otelcol"
 
+  command:
+    extraArgs: ["--feature-gates=exporter.googlemanagedprometheus.intToDouble"]
+
   alternateConfig:
     processors:
       memory_limiter:
