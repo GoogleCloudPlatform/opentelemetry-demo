@@ -45,7 +45,7 @@
     "sharp": "0.33.4",
     "styled-components": "6.1.11",
     "ts-proto": "1.181.1",
-    "uuid": "10.0.0"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
