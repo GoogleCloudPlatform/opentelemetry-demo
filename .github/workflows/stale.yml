@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "12 3 * * *"  # arbitrary time not to DDOS GitHub
 
+permissions:
+  pull-requests: write   # actions/stale labels, comments on, and closes stale PRs
+  # issues are skipped here (days-before-issue-stale: -1)
+
 jobs:
   stale:
     runs-on: ubuntu-latest

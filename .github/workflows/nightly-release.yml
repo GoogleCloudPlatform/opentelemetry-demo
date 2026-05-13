@@ -7,6 +7,10 @@ on:
     # Runs at 00:00 UTC every day
     - cron: '0 0 * * *'
 
+permissions:
+  contents: read
+  packages: write   # the reusable build-push-action pushes images to ghcr.io with push: true
+
 jobs:
   build_and_push_images:
     uses: ./.github/workflows/component-build-images.yml
