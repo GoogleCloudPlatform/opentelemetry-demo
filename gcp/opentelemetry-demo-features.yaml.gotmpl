@@ -46,9 +46,6 @@ opentelemetry-collector:
 
     extensions:
       googleclientauth:
-        scopes:
-        - "https://www.googleapis.com/auth/trace.append"
-        - "https://www.googleapis.com/auth/cloud-platform"
 {{ with .Values | getOrNil "auth_extension_project_id" }}
         project: "{{ . }}"
 {{ end }}
@@ -61,5 +58,9 @@ opentelemetry-collector:
       pipelines:
         traces:
           processors: [k8sattributes, memory_limiter, resourcedetection, resource, resource/gcp_project_id, batch]
+          exporters: [googlecloud, otlphttp/gcp_auth]
+        metrics:
+          receivers: [otlp]
+          processors: [k8sattributes, memory_limiter, filter/too_frequent, resourcedetection, transform/collision, resource, resource/gcp_project_id, batch]
           exporters: [otlphttp/gcp_auth]
 {{ end }}

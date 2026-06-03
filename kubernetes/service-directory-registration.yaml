@@ -27,4 +27,4 @@ spec:
       selector:
         matchLabels:
           app.kubernetes.io/part-of: "opentelemetry-demo"
-          app.kubernetes.io/component: frontendproxy
+          app.kubernetes.io/component: frontend-proxy
