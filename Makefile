@@ -125,7 +125,8 @@ generate-kubernetes-manifests:
 	echo "  name: otel-demo" >> kubernetes/opentelemetry-demo.yaml
 	helmfile template --file gcp/helmfile.yaml ${HELMFILE_FLAGS} | sed '/helm.sh\/chart\:/d' | sed '/helm.sh\/hook/d' | sed '/managed-by\: Helm/d' >> kubernetes/opentelemetry-demo.yaml
 	echo "---" >> kubernetes/opentelemetry-demo.yaml
-	cat kubernetes/managed-otel-instrumentation.yaml >> kubernetes/opentelemetry-demo.yaml
+	cat kubernetes/otel-collector-external-service.yaml >> kubernetes/opentelemetry-demo.yaml
+
 
 .PHONY: start
 start:

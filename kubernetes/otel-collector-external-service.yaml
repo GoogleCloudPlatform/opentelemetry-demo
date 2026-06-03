@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: telemetry.googleapis.com/v1alpha1
-kind: Instrumentation
+apiVersion: v1
+kind: Service
 metadata:
-  name: otel-demo-instrumentation
+  name: otel-collector
   namespace: otel-demo
 spec:
-  selector: {}
-  autoInstrumentationConfig:
-    configInjection:
-      enabled: true
+  type: ExternalName
+  externalName: opentelemetry-collector.gke-managed-otel.svc.cluster.local

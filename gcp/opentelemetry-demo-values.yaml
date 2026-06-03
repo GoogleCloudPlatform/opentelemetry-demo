@@ -26,6 +26,11 @@ opensearch:
 jaeger:
   enabled: false
 
+# Disable the default collector. We use GKE-managed OpenTelemetry instead.
+# We map the expected 'otel-collector' service to the managed collector using an ExternalName service.
+opentelemetry-collector:
+  enabled: false
+
 components:
   frontend-proxy:
     service:
@@ -34,108 +39,3 @@ components:
         networking.gke.io/internal-load-balancer-allow-global-access: "true"
         networking.gke.io/load-balancer-type: Internal
 
-opentelemetry-collector:
-  enabled: false
-  # Service account for workload identity
-  serviceAccount:
-    create: true
-    name: "opentelemetry-demo-otelcol"
-
-  command:
-    extraArgs: ["--feature-gates=exporter.googlemanagedprometheus.intToDouble"]
-
-  alternateConfig:
-    processors:
-      memory_limiter:
-        check_interval: 1s
-        limit_percentage: 65
-        spike_limit_percentage: 20
-
-      batch:
-        send_batch_max_size: 200
-        send_batch_size: 200
-        timeout: 5s
-
-      resourcedetection:
-        detectors: [gcp]
-        timeout: 10s
-
-      transform/collision:
-        metric_statements:
-        - context: datapoint
-          statements:
-          - set(attributes["exported_location"], attributes["location"])
-          - delete_key(attributes, "location")
-          - set(attributes["exported_cluster"], attributes["cluster"])
-          - delete_key(attributes, "cluster")
-          - set(attributes["exported_namespace"], attributes["namespace"])
-          - delete_key(attributes, "namespace")
-          - set(attributes["exported_job"], attributes["job"])
-          - delete_key(attributes, "job")
-          - set(attributes["exported_instance"], attributes["instance"])
-          - delete_key(attributes, "instance")
-          - set(attributes["exported_project_id"], attributes["project_id"])
-          - delete_key(attributes, "project_id")
-
-      # See https://github.com/open-telemetry/opentelemetry-demo/issues/1330
-      # flagd metrics are written too often.
-      filter/too_frequent:
-        metrics:
-          metric:
-          - '(IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"] == "flagd")'
-
-      resource:
-        attributes:
-        - action: insert
-          from_attribute: k8s.pod.uid
-          key: service.instance.id
-
-    exporters:
-      googlecloud:
-        log:
-          default_log_name: opentelemetry.io/opentelemetry-demo
-
-      googlemanagedprometheus: {}
-
-    extensions:
-      health_check:
-        endpoint: ${env:MY_POD_IP}:13133
-
-    receivers:
-      otlp:
-        protocols:
-          grpc:
-            endpoint: ${env:MY_POD_IP}:4317
-          http:
-            cors:
-              allowed_origins:
-              - http://*
-              - https://*
-            endpoint: ${env:MY_POD_IP}:4318
-
-    service:
-      extensions: [health_check]
-      telemetry:
-        logs:
-          encoding: json
-        metrics:
-          level: detailed
-          readers:
-          - periodic:
-              exporter:
-                otlp:
-                  protocol: grpc
-                  endpoint: ${env:MY_POD_IP}:4317
-      pipelines:
-        logs:
-          receivers: [otlp]
-          processors: [resourcedetection, resource, memory_limiter, batch]
-          exporters: [googlecloud]
-        traces:
-          receivers: [otlp]
-          processors: [memory_limiter, resourcedetection, resource, batch]
-          exporters: [googlecloud]  # spanmetrics disabled
-        metrics:
-          receivers: [otlp]  # spanmetrics disabled
-          processors: [memory_limiter, filter/too_frequent, resourcedetection, transform/collision, resource, batch]
-          exporters: [googlemanagedprometheus]
