@@ -1,0 +1,6 @@
+apiVersion: v2
+name: otel-collector-external-service
+description: A Helm chart to deploy the ExternalName service for GKE-managed OTel collector
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

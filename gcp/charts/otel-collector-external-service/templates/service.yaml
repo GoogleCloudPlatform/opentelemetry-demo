@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+spec:
+  type: ExternalName
+  externalName: opentelemetry-collector.gke-managed-otel.svc.cluster.local

@@ -37,3 +37,8 @@ releases:
       - opentelemetry-demo-values.yaml
       - opentelemetry-demo-features.yaml.gotmpl
       - opentelemetry-demo-cicd.yaml.gotmpl
+
+  - name: otel-collector-external-service
+    namespace: "{{ .Values.namespace }}"
+    chart: ./charts/otel-collector-external-service
+
