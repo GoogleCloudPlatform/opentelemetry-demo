@@ -13,31 +13,37 @@ running on a GKE Autopilot cluster (or any cluster with Workload Identity), you
 must follow the prerequisite steps to set up a Workload Identity-enabled service
 account below. Otherwise, you can skip to the next section.
 
-### Workload Identity Prerequisites
+### GKE Managed OpenTelemetry Prerequisites
 
-Grant permission using [Workload
-Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to)
-to write logs, traces, and metrics:
+You must enable Managed OpenTelemetry on your GKE cluster.
 
+For a new GKE Autopilot cluster:
 ```console
-export GCLOUD_PROJECT=<your project id>
-export PROJECT_NUMBER=$(gcloud projects describe ${GCLOUD_PROJECT} --format='get(projectNumber)')
+gcloud beta container clusters create-auto CLUSTER_NAME \
+    --project=PROJECT_ID \
+    --managed-otel-scope=COLLECTION_AND_INSTRUMENTATION_COMPONENTS \
+    --location=LOCATION
 ```
 
+For a new GKE Standard cluster:
 ```console
-gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
-    --role "roles/logging.logWriter"
-gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
-    --role "roles/monitoring.metricWriter"
-gcloud projects add-iam-policy-binding ${GCLOUD_PROJECT} \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
-    --role "roles/cloudtrace.agent"
-gcloud iam service-accounts add-iam-policy-binding opentelemetry-demo@${GCLOUD_PROJECT}.iam.gserviceaccount.com \
-    --member "principal://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${GCLOUD_PROJECT}.svc.id.goog/subject/ns/otel-demo/sa/opentelemetry-demo-otelcol" \
-    --role roles/iam.workloadIdentityUser \
+gcloud beta container clusters create CLUSTER_NAME \
+    --project=PROJECT_ID \
+    --managed-otel-scope=COLLECTION_AND_INSTRUMENTATION_COMPONENTS \
+    --location=LOCATION
 ```
+
+Or update an existing cluster:
+```console
+gcloud beta container clusters update CLUSTER_NAME \
+    --project=PROJECT_ID \
+    --managed-otel-scope=COLLECTION_AND_INSTRUMENTATION_COMPONENTS \
+    --location=LOCATION
+```
+
+Replace `CLUSTER_NAME`, `PROJECT_ID`, and `LOCATION` with your cluster's details.
+
+Note: The cluster version must be `1.34.1-gke.2178000` or later.
 
 ### Deploying the Helmfile
 

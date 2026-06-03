@@ -35,6 +35,7 @@ components:
         networking.gke.io/load-balancer-type: Internal
 
 opentelemetry-collector:
+  enabled: false
   # Service account for workload identity
   serviceAccount:
     create: true

@@ -7,18 +7,6 @@ kind: Namespace
 metadata:
   name: otel-demo
 ---
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: otel-collector
-  namespace: otel-demo
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
----
 # Source: opentelemetry-demo/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -29,151 +17,6 @@ metadata:
     
     app.kubernetes.io/version: "2.0.2"
     app.kubernetes.io/part-of: opentelemetry-demo
----
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: otel-collector
-  namespace: otel-demo
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
-data:
-  relay: |
-    exporters:
-      googlecloud:
-        log:
-          default_log_name: opentelemetry.io/opentelemetry-demo
-      googlemanagedprometheus: {}
-    extensions:
-      health_check:
-        endpoint: ${env:MY_POD_IP}:13133
-    processors:
-      batch:
-        send_batch_max_size: 200
-        send_batch_size: 200
-        timeout: 5s
-      filter/too_frequent:
-        metrics:
-          metric:
-          - (IsMatch(name, "(.*)app_currency(.*)")) or (resource.attributes["service.name"]
-            == "flagd")
-      k8sattributes:
-        extract:
-          metadata:
-          - k8s.namespace.name
-          - k8s.deployment.name
-          - k8s.statefulset.name
-          - k8s.daemonset.name
-          - k8s.cronjob.name
-          - k8s.job.name
-          - k8s.node.name
-          - k8s.pod.name
-          - k8s.pod.uid
-          - k8s.pod.start_time
-        passthrough: false
-        pod_association:
-        - sources:
-          - from: resource_attribute
-            name: k8s.pod.ip
-        - sources:
-          - from: resource_attribute
-            name: k8s.pod.uid
-        - sources:
-          - from: connection
-      memory_limiter:
-        check_interval: 1s
-        limit_percentage: 65
-        spike_limit_percentage: 20
-      resource:
-        attributes:
-        - action: insert
-          from_attribute: k8s.pod.uid
-          key: service.instance.id
-      resourcedetection:
-        detectors:
-        - gcp
-        timeout: 10s
-      transform/collision:
-        metric_statements:
-        - context: datapoint
-          statements:
-          - set(attributes["exported_location"], attributes["location"])
-          - delete_key(attributes, "location")
-          - set(attributes["exported_cluster"], attributes["cluster"])
-          - delete_key(attributes, "cluster")
-          - set(attributes["exported_namespace"], attributes["namespace"])
-          - delete_key(attributes, "namespace")
-          - set(attributes["exported_job"], attributes["job"])
-          - delete_key(attributes, "job")
-          - set(attributes["exported_instance"], attributes["instance"])
-          - delete_key(attributes, "instance")
-          - set(attributes["exported_project_id"], attributes["project_id"])
-          - delete_key(attributes, "project_id")
-    receivers:
-      otlp:
-        protocols:
-          grpc:
-            endpoint: ${env:MY_POD_IP}:4317
-          http:
-            cors:
-              allowed_origins:
-              - http://*
-              - https://*
-            endpoint: ${env:MY_POD_IP}:4318
-    service:
-      extensions:
-      - health_check
-      pipelines:
-        logs:
-          exporters:
-          - googlecloud
-          processors:
-          - k8sattributes
-          - resourcedetection
-          - resource
-          - memory_limiter
-          - batch
-          receivers:
-          - otlp
-        metrics:
-          exporters:
-          - googlemanagedprometheus
-          processors:
-          - k8sattributes
-          - memory_limiter
-          - filter/too_frequent
-          - resourcedetection
-          - transform/collision
-          - resource
-          - batch
-          receivers:
-          - otlp
-        traces:
-          exporters:
-          - googlecloud
-          processors:
-          - k8sattributes
-          - memory_limiter
-          - resourcedetection
-          - resource
-          - batch
-          receivers:
-          - otlp
-      telemetry:
-        logs:
-          encoding: json
-        metrics:
-          level: detailed
-          readers:
-          - periodic:
-              exporter:
-                otlp:
-                  endpoint: ${env:MY_POD_IP}:4317
-                  protocol: grpc
 ---
 # Source: opentelemetry-demo/templates/flagd-config.yaml
 apiVersion: v1
@@ -464,97 +307,6 @@ data:
         }
       ]
     }
----
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/clusterrole.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: otel-collector
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
-rules:
-  - apiGroups: [""]
-    resources: ["pods", "namespaces"]
-    verbs: ["get", "watch", "list"]
-  - apiGroups: ["apps"]
-    resources: ["replicasets"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["extensions"]
-    resources: ["replicasets"]
-    verbs: ["get", "list", "watch"]
----
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/clusterrolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: otel-collector
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: otel-collector
-subjects:
-- kind: ServiceAccount
-  name: otel-collector
-  namespace: otel-demo
----
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: otel-collector
-  namespace: otel-demo
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
-    component: standalone-collector
-spec:
-  type: ClusterIP
-  ports:
-    
-    - name: jaeger-compact
-      port: 6831
-      targetPort: 6831
-      protocol: UDP
-    - name: jaeger-grpc
-      port: 14250
-      targetPort: 14250
-      protocol: TCP
-    - name: jaeger-thrift
-      port: 14268
-      targetPort: 14268
-      protocol: TCP
-    - name: metrics
-      port: 8888
-      targetPort: 8888
-      protocol: TCP
-    - name: otlp
-      port: 4317
-      targetPort: 4317
-      protocol: TCP
-      appProtocol: grpc
-    - name: otlp-http
-      port: 4318
-      targetPort: 4318
-      protocol: TCP
-    - name: zipkin
-      port: 9411
-      targetPort: 9411
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    component: standalone-collector
-  internalTrafficPolicy: Cluster
 ---
 # Source: opentelemetry-demo/templates/component.yaml
 apiVersion: v1
@@ -958,107 +710,6 @@ spec:
   selector:
     
     opentelemetry.io/name: valkey-cart
----
-# Source: opentelemetry-demo/charts/opentelemetry-collector/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: otel-collector
-  namespace: otel-demo
-  labels:
-    app.kubernetes.io/name: opentelemetry-collector
-    app.kubernetes.io/instance: opentelemetry-demo
-    app.kubernetes.io/version: "0.131.0"
-    app.kubernetes.io/component: standalone-collector
-spec:
-  replicas: 1
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: opentelemetry-collector
-      app.kubernetes.io/instance: opentelemetry-demo
-      component: standalone-collector
-  strategy:
-    type: RollingUpdate
-  template:
-    metadata:
-      annotations:
-        checksum/config: 102210b7a57a26f04e80f534a9a17aa6bbca100d10382f92a831159ddbb6b23b
-        opentelemetry_community_demo: "true"
-        prometheus.io/scrape: "true"
-      labels:
-        app.kubernetes.io/name: opentelemetry-collector
-        app.kubernetes.io/instance: opentelemetry-demo
-        component: standalone-collector
-        
-    spec:
-      
-      serviceAccountName: otel-collector
-      automountServiceAccountToken: true
-      securityContext:
-        {}
-      containers:
-        - name: opentelemetry-collector
-          args:
-            - --config=/conf/relay.yaml
-            - --feature-gates=exporter.googlemanagedprometheus.intToDouble
-          securityContext:
-            {}
-          image: "otel/opentelemetry-collector-contrib:0.131.0"
-          imagePullPolicy: IfNotPresent
-          ports:
-            
-            - name: jaeger-compact
-              containerPort: 6831
-              protocol: UDP
-            - name: jaeger-grpc
-              containerPort: 14250
-              protocol: TCP
-            - name: jaeger-thrift
-              containerPort: 14268
-              protocol: TCP
-            - name: metrics
-              containerPort: 8888
-              protocol: TCP
-            - name: otlp
-              containerPort: 4317
-              protocol: TCP
-            - name: otlp-http
-              containerPort: 4318
-              protocol: TCP
-            - name: zipkin
-              containerPort: 9411
-              protocol: TCP
-          env:
-            - name: MY_POD_IP
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: status.podIP
-            - name: GOMEMLIMIT
-              value: "160MiB"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 13133
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 13133
-          resources:
-            limits:
-              memory: 200Mi
-          volumeMounts:
-            - mountPath: /conf
-              name: opentelemetry-collector-configmap
-      volumes:
-        - name: opentelemetry-collector-configmap
-          configMap:
-            name: otel-collector
-            items:
-              - key: relay
-                path: relay.yaml
-      hostNetwork: false
 ---
 # Source: opentelemetry-demo/templates/component.yaml
 apiVersion: apps/v1
@@ -2453,3 +2104,28 @@ spec:
           volumeMounts:
       volumes:
 
+---
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: telemetry.googleapis.com/v1alpha1
+kind: Instrumentation
+metadata:
+  name: otel-demo-instrumentation
+  namespace: otel-demo
+spec:
+  selector: {}
+  autoInstrumentationConfig:
+    configInjection:
+      enabled: true
