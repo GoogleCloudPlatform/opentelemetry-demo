@@ -31,6 +31,6 @@
     "grpc-js-health-check": "1.1.0",
     "pino": "8.16.1",
     "simple-card-validator": "1.1.0",
-    "uuid": "9.0.1"
+    "uuid": "14.0.0"
   }
 }
