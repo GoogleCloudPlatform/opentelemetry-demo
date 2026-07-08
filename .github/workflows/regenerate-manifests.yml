@@ -1,0 +1,77 @@
+# Copyright The OpenTelemetry Authors
+# SPDX-License-Identifier: Apache-2.0
+
+name: Regenerate Manifests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'gcp/**'
+      - 'Makefile'
+      - '.github/workflows/regenerate-manifests.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332  # v4.1.7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+
+      - name: Install Helm and Helmfile
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+
+          # Install Helm
+          # renovate: datasource=github-releases depName=helm/helm
+          HELM_VERSION="v4.2.0"
+          curl -L -o helm.tar.gz https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
+          tar -zxvf helm.tar.gz
+          mv linux-amd64/helm $GITHUB_WORKSPACE/bin/
+          rm -rf helm.tar.gz linux-amd64
+
+          # Install Helmfile
+          # renovate: datasource=github-releases depName=helmfile/helmfile
+          HELMFILE_VERSION="1.5.2"
+          curl -L -o helmfile.tar.gz https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz
+          tar -zxvf helmfile.tar.gz helmfile
+          mv helmfile $GITHUB_WORKSPACE/bin/
+          rm -rf helmfile.tar.gz
+
+          # Add to PATH
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Regenerate manifests
+        run: |
+          make generate-kubernetes-manifests
+
+      - name: Check for changes and commit/push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add kubernetes/opentelemetry-demo.yaml
+
+          if ! git diff --quiet --staged; then
+            echo "Changes detected in regenerated manifests."
+
+            if [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
+              echo "PR is from the same repository. Committing and pushing..."
+              git commit -m "chore: regenerate kubernetes manifests"
+              git push
+            else
+              echo "PR is from a fork. Cannot auto-commit due to GITHUB_TOKEN restrictions."
+              echo "Please run 'make generate-kubernetes-manifests' locally and push the changes."
+              echo "Showing diff for debugging:"
+              git diff --staged
+              exit 1
+            fi
+          else
+            echo "No changes detected. Manifests are up-to-date."
+          fi

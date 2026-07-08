@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["helmfile"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchPackageNames": ["helm/helm", "helmfile/helmfile"],
+      "groupName": "helm-tools"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/regenerate-manifests\\.yml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s+[A-Z_]+_VERSION=\"(?<currentValue>.*?)\""
+      ]
+    }
+  ]
+}
