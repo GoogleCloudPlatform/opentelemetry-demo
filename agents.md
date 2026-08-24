@@ -33,7 +33,22 @@ Monitoring, Cloud Logging, and Cloud Trace).
 
 ## Key Workflows
 
-### Syncing with Upstream
+### Updating from Upstream Helm Chart
+
+To update this fork with the latest upstream Helm chart release and regenerate
+Kubernetes manifests, use the `update-upstream` skill
+([`.agents/skills/update-upstream/SKILL.md`](.agents/skills/update-upstream/SKILL.md))
+or follow these steps:
+
+1. Check the latest release:
+   `gh release list -R open-telemetry/opentelemetry-helm-charts | grep 'opentelemetry-demo-'`.
+2. Update the `version` field in `gcp/helmfile.yaml`.
+3. Regenerate Kubernetes manifests: `make generate-kubernetes-manifests`.
+4. Update `gcp/opentelemetry-demo-values.yaml` if breaking changes were
+   introduced upstream.
+5. Validate with `make check`, commit, and open a Pull Request.
+
+### Syncing Git History with Upstream
 
 To sync this fork with upstream updates, follow these steps:
 
