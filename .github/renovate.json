@@ -12,7 +12,7 @@
   "packageRules": [
     {
       "matchManagers": ["helmfile"],
-      "rangeStrategy": "bump"
+      "rangeStrategy": "pin"
     },
     {
       "matchPackageNames": ["helm/helm", "helmfile/helmfile"],
