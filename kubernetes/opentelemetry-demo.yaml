@@ -1951,6 +1951,8 @@ spec:
           resources:
             limits:
               memory: 500Mi
+            requests:
+              memory: 100Mi
           volumeMounts:
             - mountPath: /app/fixtures/vcr_cassettes
               name: agent-fixtures
@@ -2204,6 +2206,8 @@ spec:
           resources:
             limits:
               memory: 500Mi
+            requests:
+              memory: 100Mi
           volumeMounts:
       volumes:
 ---
@@ -3035,6 +3039,8 @@ spec:
           resources:
             limits:
               memory: 700Mi
+            requests:
+              memory: 300Mi
           securityContext:
             runAsGroup: 1000
             runAsNonRoot: true
@@ -3133,7 +3139,9 @@ spec:
               value: service.version=3.1.0,service.criticality=low
           resources:
             limits:
-              memory: 1500Mi
+              memory: 1200Mi
+            requests:
+              memory: 200Mi
           volumeMounts:
       volumes:
 ---
@@ -3207,6 +3215,8 @@ spec:
           resources:
             limits:
               memory: 500Mi
+            requests:
+              memory: 100Mi
           volumeMounts:
       volumes:
 ---
@@ -3593,6 +3603,8 @@ spec:
           resources:
             limits:
               memory: 500Mi
+            requests:
+              memory: 100Mi
           volumeMounts:
       volumes:
 ---

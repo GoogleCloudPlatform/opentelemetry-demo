@@ -46,6 +46,8 @@ steps:
     set -e
     NAMESPACE="otel-demo-pr-${_PR_NUMBER}-${SHORT_SHA}"
     cleanup() {
+      echo "Pod status in namespace $${NAMESPACE} before cleanup:"
+      kubectl get pods -n "$${NAMESPACE}" -o wide || true
       echo "Cleaning up namespace $${NAMESPACE}..."
       kubectl delete namespace "$${NAMESPACE}" || true
     }

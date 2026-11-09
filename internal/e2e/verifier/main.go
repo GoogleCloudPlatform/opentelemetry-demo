@@ -137,31 +137,44 @@ func verifyLogs(ctx context.Context, client *logadmin.Client) error {
 }
 
 func verifyTraces(ctx context.Context, client *trace.Client) error {
-	log.Println("DEBUG: Searching for namespace in all traces...")
-	req := &tracepb.ListTracesRequest{
-		ProjectId: *projectID,
-		StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
-		EndTime:   timestamppb.New(time.Now()),
-		View:      tracepb.ListTracesRequest_COMPLETE,
+	log.Println("DEBUG: Searching for namespace in traces...")
+	filters := []string{
+		fmt.Sprintf("+k8s.namespace.name:%s", *namespace),
+		"",
 	}
-	iter := client.ListTraces(ctx, req)
-	for {
-		tr, err := iter.Next()
-		if err == iterator.Done {
-			break
+	for _, filter := range filters {
+		req := &tracepb.ListTracesRequest{
+			ProjectId: *projectID,
+			StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
+			EndTime:   timestamppb.New(time.Now()),
+			View:      tracepb.ListTracesRequest_COMPLETE,
+			Filter:    filter,
 		}
-		if err != nil {
-			return fmt.Errorf("error listing traces: %w", err)
-		}
-		for _, span := range tr.Spans {
-			for k, v := range span.Labels {
-				if v == *namespace {
-					log.Printf("DEBUG: Found namespace %s in label %s of span %s (trace %s)", *namespace, k, span.Name, tr.TraceId)
+		iter := client.ListTraces(ctx, req)
+		checked := 0
+		for {
+			tr, err := iter.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				log.Printf("DEBUG: ListTraces(filter=%q) error: %v", filter, err)
+				break
+			}
+			for _, span := range tr.Spans {
+				for k, v := range span.Labels {
+					if v == *namespace {
+						log.Printf("DEBUG: Found namespace %s in label %s of span %s (trace %s)", *namespace, k, span.Name, tr.TraceId)
+					}
+					if k == "k8s.namespace.name" && v == *namespace {
+						fmt.Printf("Found trace: %s (via k8s.namespace.name check in Go)\n", tr.TraceId)
+						return nil
+					}
 				}
-				if k == "k8s.namespace.name" && v == *namespace {
-					fmt.Printf("Found trace: %s (via k8s.namespace.name check in Go)\n", tr.TraceId)
-					return nil
-				}
+			}
+			checked++
+			if filter == "" && checked >= 100 {
+				break
 			}
 		}
 	}
@@ -174,44 +187,56 @@ func verifyMetrics(ctx context.Context, client *monitoring.MetricClient) error {
 		"prometheus.googleapis.com/demo.recommendation.requests/counter",
 		"prometheus.googleapis.com/demo.ad.requests/counter",
 		"prometheus.googleapis.com/http.server.request.duration/histogram",
+		"prometheus.googleapis.com/http.client.request.duration/histogram",
+		"prometheus.googleapis.com/nodejs.eventloop.utilization/gauge",
+		"prometheus.googleapis.com/target_info/gauge",
 	}
 	fmt.Println("Found TimeSeries:")
 	count := 0
 	matchedCount := 0
 	var lastErr error
-	for _, metricType := range metricTypes {
-		req := &monitoringpb.ListTimeSeriesRequest{
-			Name:   fmt.Sprintf("projects/%s", *projectID),
-			Filter: fmt.Sprintf(`metric.type = %q`, metricType),
-			Interval: &monitoringpb.TimeInterval{
-				StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
-				EndTime:   timestamppb.New(time.Now()),
-			},
-		}
-		iter := client.ListTimeSeries(ctx, req)
-		for {
-			ts, err := iter.Next()
-			if err == iterator.Done {
+	for _, filterByNamespace := range []bool{true, false} {
+		for _, metricType := range metricTypes {
+			filter := fmt.Sprintf(`metric.type = %q`, metricType)
+			if filterByNamespace {
+				filter = fmt.Sprintf(`metric.type = %q AND resource.labels.namespace = %q`, metricType, *namespace)
+			}
+			req := &monitoringpb.ListTimeSeriesRequest{
+				Name:   fmt.Sprintf("projects/%s", *projectID),
+				Filter: filter,
+				Interval: &monitoringpb.TimeInterval{
+					StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
+					EndTime:   timestamppb.New(time.Now()),
+				},
+			}
+			iter := client.ListTimeSeries(ctx, req)
+			for {
+				ts, err := iter.Next()
+				if err == iterator.Done {
+					break
+				}
+				if err != nil {
+					lastErr = fmt.Errorf("error listing metrics for %s: %w", metricType, err)
+					break
+				}
+				ns := ts.Resource.Labels["namespace"]
+				job := ts.Resource.Labels["job"]
+
+				isMatched := ns == *namespace ||
+					(ns == "" && (fmt.Sprintf("%s", ts.Resource.Labels) == *namespace ||
+						fmt.Sprintf("%s", ts.Metric.Labels) == *namespace)) ||
+					(job != "" && (job == *namespace || strings.HasPrefix(job, *namespace+"/")))
+
+				if isMatched {
+					fmt.Printf("MATCHED (%s) - Job: %s, ResourceLabels: %v, ResourceType: %s, MetricLabels: %v\n",
+						metricType, job, ts.Resource.Labels, ts.Resource.Type, ts.Metric.Labels)
+					matchedCount++
+				}
+				count++
+			}
+			if matchedCount > 0 {
 				break
 			}
-			if err != nil {
-				lastErr = fmt.Errorf("error listing metrics for %s: %w", metricType, err)
-				break
-			}
-			ns := ts.Resource.Labels["namespace"]
-			job := ts.Resource.Labels["job"]
-
-			isMatched := ns == *namespace ||
-				(ns == "" && (fmt.Sprintf("%s", ts.Resource.Labels) == *namespace ||
-					fmt.Sprintf("%s", ts.Metric.Labels) == *namespace)) ||
-				(job != "" && (job == *namespace || strings.HasPrefix(job, *namespace+"/")))
-
-			if isMatched {
-				fmt.Printf("MATCHED (%s) - Job: %s, ResourceLabels: %v, ResourceType: %s, MetricLabels: %v\n",
-					metricType, job, ts.Resource.Labels, ts.Resource.Type, ts.Metric.Labels)
-				matchedCount++
-			}
-			count++
 		}
 		if matchedCount > 0 {
 			break
