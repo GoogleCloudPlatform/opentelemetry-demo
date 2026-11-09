@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/logging/logadmin"
@@ -169,45 +170,59 @@ func verifyTraces(ctx context.Context, client *trace.Client) error {
 }
 
 func verifyMetrics(ctx context.Context, client *monitoring.MetricClient) error {
-	metricType := "prometheus.googleapis.com/app.frontend.requests/counter"
-	req := &monitoringpb.ListTimeSeriesRequest{
-		Name:   fmt.Sprintf("projects/%s", *projectID),
-		Filter: fmt.Sprintf(`metric.type = %q`, metricType),
-		Interval: &monitoringpb.TimeInterval{
-			StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
-			EndTime:   timestamppb.New(time.Now()),
-		},
+	metricTypes := []string{
+		"prometheus.googleapis.com/demo.recommendation.requests/counter",
+		"prometheus.googleapis.com/demo.ad.requests/counter",
+		"prometheus.googleapis.com/http.server.request.duration/histogram",
 	}
-	iter := client.ListTimeSeries(ctx, req)
 	fmt.Println("Found TimeSeries:")
 	count := 0
 	matchedCount := 0
-	for {
-		ts, err := iter.Next()
-		if err == iterator.Done {
+	var lastErr error
+	for _, metricType := range metricTypes {
+		req := &monitoringpb.ListTimeSeriesRequest{
+			Name:   fmt.Sprintf("projects/%s", *projectID),
+			Filter: fmt.Sprintf(`metric.type = %q`, metricType),
+			Interval: &monitoringpb.TimeInterval{
+				StartTime: timestamppb.New(time.Now().Add(-10 * time.Minute)),
+				EndTime:   timestamppb.New(time.Now()),
+			},
+		}
+		iter := client.ListTimeSeries(ctx, req)
+		for {
+			ts, err := iter.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				lastErr = fmt.Errorf("error listing metrics for %s: %w", metricType, err)
+				break
+			}
+			ns := ts.Resource.Labels["namespace"]
+			job := ts.Resource.Labels["job"]
+
+			isMatched := ns == *namespace ||
+				(ns == "" && (fmt.Sprintf("%s", ts.Resource.Labels) == *namespace ||
+					fmt.Sprintf("%s", ts.Metric.Labels) == *namespace)) ||
+				(job != "" && (job == *namespace || strings.HasPrefix(job, *namespace+"/")))
+
+			if isMatched {
+				fmt.Printf("MATCHED (%s) - Job: %s, ResourceLabels: %v, ResourceType: %s, MetricLabels: %v\n",
+					metricType, job, ts.Resource.Labels, ts.Resource.Type, ts.Metric.Labels)
+				matchedCount++
+			}
+			count++
+		}
+		if matchedCount > 0 {
 			break
 		}
-		if err != nil {
-			return fmt.Errorf("error listing metrics: %w", err)
-		}
-		ns := ts.Resource.Labels["namespace"]
-		job := ts.Resource.Labels["job"]
-		
-		isMatched := ns == *namespace || 
-			(ns == "" && (fmt.Sprintf("%s", ts.Resource.Labels) == *namespace || 
-				fmt.Sprintf("%s", ts.Metric.Labels) == *namespace)) ||
-			(job != "" && (job == *namespace || job == fmt.Sprintf("%s/%s", *namespace, "frontend")))
-
-		if isMatched {
-			fmt.Printf("MATCHED - Job: %s, ResourceLabels: %v, ResourceType: %s, MetricLabels: %v\n",
-				job, ts.Resource.Labels, ts.Resource.Type, ts.Metric.Labels)
-			matchedCount++
-		}
-		count++
 	}
 	fmt.Printf("Total timeseries checked: %d, Matched: %d\n", count, matchedCount)
 	if matchedCount > 0 {
 		return nil
+	}
+	if lastErr != nil {
+		return fmt.Errorf("no metrics found for namespace %s (last error: %w)", *namespace, lastErr)
 	}
 	return fmt.Errorf("no metrics found for namespace %s", *namespace)
 }

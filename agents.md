@@ -184,7 +184,7 @@ changes) in a test environment:
    Apply the manifest:
 
    ```sh
-   kubectl apply -f kubernetes/opentelemetry-demo-test.yaml
+   kubectl apply --server-side -f kubernetes/opentelemetry-demo-test.yaml
    ```
 
 5. **Verify Telemetry:**

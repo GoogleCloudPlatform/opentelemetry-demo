@@ -43,6 +43,7 @@ steps:
   args:
   - '-c'
   - |
+    set -e
     NAMESPACE="otel-demo-pr-${_PR_NUMBER}-${SHORT_SHA}"
     cleanup() {
       echo "Cleaning up namespace $${NAMESPACE}..."

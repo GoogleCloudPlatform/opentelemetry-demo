@@ -91,7 +91,7 @@ First, make sure you have followed the Workload Identity setup steps above.
 Install the manifests:
 
 ```console
-kubectl apply -n otel-demo -f ./kubernetes/opentelemetry-demo.yaml
+kubectl apply --server-side -n otel-demo -f ./kubernetes/opentelemetry-demo.yaml
 ```
 
 ## Seeing Telemetry
