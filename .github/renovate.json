@@ -3,6 +3,12 @@
   "extends": [
     "config:recommended"
   ],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchManagers": ["helmfile"],
@@ -11,12 +17,26 @@
     {
       "matchPackageNames": ["helm/helm", "helmfile/helmfile"],
       "groupName": "helm-tools"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions"
+    },
+    {
+      "matchManagers": ["npm"],
+      "groupName": "npm-dependencies"
+    },
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "go-dependencies"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^\\.github/workflows/regenerate-manifests\\.yml$"],
+      "managerFilePatterns": [
+        "/^\\.github/workflows/regenerate-manifests\\.yml$/"
+      ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s+[A-Z_]+_VERSION=\"(?<currentValue>.*?)\""
       ]
