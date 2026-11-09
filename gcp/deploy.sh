@@ -16,7 +16,7 @@
 
 set -ex
 
-apply="kubectl apply -k"
+apply="kubectl apply --server-side -k"
 
 # $helmfile_vars is an associative array that will be passed to helmfile --state-values-set-string
 declare -A helmfile_vars
@@ -86,7 +86,7 @@ trap cleanup EXIT
 cd "$kustomize_dir"
 
 cp "$src/kubernetes/opentelemetry-demo.yaml" ./
-sed -i "s/service.namespace=opentelemetry-demo/service.namespace=${helmfile_vars["namespace"]}/g" opentelemetry-demo.yaml
+sed -i -E "s/service\.namespace([=: ]+)opentelemetry-demo/service.namespace\1${helmfile_vars["namespace"]}/g" opentelemetry-demo.yaml
 
 
 cat > role.yaml <<EOF

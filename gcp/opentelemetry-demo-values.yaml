@@ -38,3 +38,29 @@ components:
       annotations:
         networking.gke.io/internal-load-balancer-allow-global-access: "true"
         networking.gke.io/load-balancer-type: Internal
+  load-generator:
+    resources:
+      limits:
+        memory: 1200Mi
+      requests:
+        memory: 200Mi
+  kafka:
+    resources:
+      requests:
+        memory: 300Mi
+  recommendation:
+    resources:
+      requests:
+        memory: 100Mi
+  agent:
+    resources:
+      requests:
+        memory: 100Mi
+  chatbot:
+    resources:
+      requests:
+        memory: 100Mi
+  mcp:
+    resources:
+      requests:
+        memory: 100Mi
