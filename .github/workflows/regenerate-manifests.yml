@@ -8,11 +8,12 @@ on:
     branches: [main]
     paths:
       - 'gcp/**'
+      - 'kubernetes/opentelemetry-demo.yaml'
       - 'Makefile'
       - '.github/workflows/regenerate-manifests.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   regenerate:
@@ -21,9 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332  # v4.1.7
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Install Helm and Helmfile
         run: |
@@ -52,26 +51,13 @@ jobs:
         run: |
           make generate-kubernetes-manifests
 
-      - name: Check for changes and commit/push
+      - name: Verify manifests are up-to-date
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add kubernetes/opentelemetry-demo.yaml
-
-          if ! git diff --quiet --staged; then
-            echo "Changes detected in regenerated manifests."
-
-            if [ "${{ github.event.pull_request.head.repo.full_name }}" = "${{ github.repository }}" ]; then
-              echo "PR is from the same repository. Committing and pushing..."
-              git commit -m "chore: regenerate kubernetes manifests"
-              git push
-            else
-              echo "PR is from a fork. Cannot auto-commit due to GITHUB_TOKEN restrictions."
-              echo "Please run 'make generate-kubernetes-manifests' locally and push the changes."
-              echo "Showing diff for debugging:"
-              git diff --staged
-              exit 1
-            fi
+          if ! git diff --quiet kubernetes/opentelemetry-demo.yaml; then
+            echo "Error: kubernetes/opentelemetry-demo.yaml is out of date with gcp/helmfile.yaml."
+            echo "Please run 'make generate-kubernetes-manifests' locally and commit the updated manifest."
+            git diff kubernetes/opentelemetry-demo.yaml
+            exit 1
           else
             echo "No changes detected. Manifests are up-to-date."
           fi
